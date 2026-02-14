@@ -1,12 +1,8 @@
 package com.visitonsmonde.servlet;
 
 import com.visitonsmonde.dao.*;
-import com.visitonsmonde.model.Destination;
-import com.visitonsmonde.model.TypeTour;
-import com.visitonsmonde.model.Utilisateur;
-import com.visitonsmonde.model.Guide;
+import com.visitonsmonde.model.*;
 import jakarta.servlet.ServletException;
-import com.visitonsmonde.model.Reservation;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -180,6 +176,8 @@ public class AdminServlet extends HttpServlet {
                 gererGuides(request, response, action);
             } else if (action.startsWith("type-tour-")) {
                 gererTypesTours(request, response, action);
+            } else if (action.startsWith("pays-")) {
+                gererPays(request, response, action);
             } else {
                 session.setAttribute("erreur", "Action non reconnue: " + action);
             }
@@ -262,6 +260,87 @@ public class AdminServlet extends HttpServlet {
             session.setAttribute("erreur", "Erreur lors de l'ajout de la destination.");
         }
     }
+
+    private void modifierDestination(HttpServletRequest request, HttpSession session) {
+        try {
+            String idStr = request.getParameter("id");
+            if (idStr == null || idStr.trim().isEmpty()) {
+                session.setAttribute("erreur", "ID de destination manquant.");
+                return;
+            }
+
+            int id = Integer.parseInt(idStr);
+
+            String nom = request.getParameter("nom");
+            String description = request.getParameter("description");
+            String image = request.getParameter("image");
+            String paysIdStr = request.getParameter("paysId");
+            String prixStr = request.getParameter("prix");
+            String nbPhotosStr = request.getParameter("nbPhotos");
+
+            if (nom == null || nom.trim().isEmpty()) {
+                session.setAttribute("erreur", "Le nom de la destination est obligatoire.");
+                return;
+            }
+
+            Destination destination = new Destination();
+            destination.setId(id);
+            destination.setNom(nom.trim());
+            destination.setDescription(description != null ? description.trim() : "");
+            destination.setImage(image != null ? image.trim() : "");
+
+            if (paysIdStr != null && !paysIdStr.trim().isEmpty()) {
+                destination.setPaysId(Integer.parseInt(paysIdStr));
+            }
+
+            if (prixStr != null && !prixStr.trim().isEmpty()) {
+                destination.setPrix(new java.math.BigDecimal(prixStr));
+            }
+
+            if (nbPhotosStr != null && !nbPhotosStr.trim().isEmpty()) {
+                destination.setNbPhotos(Integer.parseInt(nbPhotosStr));
+            } else {
+                destination.setNbPhotos(0);
+            }
+
+            destinationDAO.update(destination);
+            session.setAttribute("messageSucces", "Destination '" + nom + "' modifiée avec succès !");
+            System.out.println("Destination modifiée: " + nom);
+
+        } catch (NumberFormatException e) {
+            session.setAttribute("erreur", "Erreur dans les données numériques.");
+        } catch (Exception e) {
+            System.err.println("Erreur modification destination: " + e.getMessage());
+            session.setAttribute("erreur", "Erreur lors de la modification de la destination.");
+        }
+    }
+
+    private void supprimerDestination(HttpServletRequest request, HttpSession session) {
+        try {
+            String idStr = request.getParameter("id");
+            if (idStr == null || idStr.trim().isEmpty()) {
+                session.setAttribute("erreur", "ID de destination manquant.");
+                return;
+            }
+
+            int id = Integer.parseInt(idStr);
+
+            Destination destination = destinationDAO.getDestinationById(id);
+            String nomDestination = (destination != null) ? destination.getNom() : "ID " + id;
+
+            destinationDAO.delete(id);
+            session.setAttribute("messageSucces", "Destination '" + nomDestination + "' supprimée avec succès !");
+            System.out.println("Destination supprimée: " + nomDestination);
+
+        } catch (NumberFormatException e) {
+            session.setAttribute("erreur", "ID de destination invalide.");
+        } catch (Exception e) {
+            System.err.println("Erreur suppression destination: " + e.getMessage());
+            session.setAttribute("erreur", "Erreur lors de la suppression de la destination.");
+        }
+    }
+
+    // ===== MÉTHODES DE GESTION DES TYPES DE TOURS =====
 
     private void gererTypesTours(HttpServletRequest request, HttpServletResponse response, String action)
             throws ServletException, IOException {
@@ -389,85 +468,6 @@ public class AdminServlet extends HttpServlet {
         } catch (Exception e) {
             System.err.println("Erreur suppression type de tour: " + e.getMessage());
             session.setAttribute("erreur", "Erreur lors de la suppression du type de tour.");
-        }
-    }
-
-    private void modifierDestination(HttpServletRequest request, HttpSession session) {
-        try {
-            String idStr = request.getParameter("id");
-            if (idStr == null || idStr.trim().isEmpty()) {
-                session.setAttribute("erreur", "ID de destination manquant.");
-                return;
-            }
-
-            int id = Integer.parseInt(idStr);
-
-            String nom = request.getParameter("nom");
-            String description = request.getParameter("description");
-            String image = request.getParameter("image");
-            String paysIdStr = request.getParameter("paysId");
-            String prixStr = request.getParameter("prix");
-            String nbPhotosStr = request.getParameter("nbPhotos");
-
-            if (nom == null || nom.trim().isEmpty()) {
-                session.setAttribute("erreur", "Le nom de la destination est obligatoire.");
-                return;
-            }
-
-            Destination destination = new Destination();
-            destination.setId(id);
-            destination.setNom(nom.trim());
-            destination.setDescription(description != null ? description.trim() : "");
-            destination.setImage(image != null ? image.trim() : "");
-
-            if (paysIdStr != null && !paysIdStr.trim().isEmpty()) {
-                destination.setPaysId(Integer.parseInt(paysIdStr));
-            }
-
-            if (prixStr != null && !prixStr.trim().isEmpty()) {
-                destination.setPrix(new java.math.BigDecimal(prixStr));
-            }
-
-            if (nbPhotosStr != null && !nbPhotosStr.trim().isEmpty()) {
-                destination.setNbPhotos(Integer.parseInt(nbPhotosStr));
-            } else {
-                destination.setNbPhotos(0);
-            }
-
-            destinationDAO.update(destination);
-            session.setAttribute("messageSucces", "Destination '" + nom + "' modifiée avec succès !");
-            System.out.println("Destination modifiée: " + nom);
-
-        } catch (NumberFormatException e) {
-            session.setAttribute("erreur", "Erreur dans les données numériques.");
-        } catch (Exception e) {
-            System.err.println("Erreur modification destination: " + e.getMessage());
-            session.setAttribute("erreur", "Erreur lors de la modification de la destination.");
-        }
-    }
-
-    private void supprimerDestination(HttpServletRequest request, HttpSession session) {
-        try {
-            String idStr = request.getParameter("id");
-            if (idStr == null || idStr.trim().isEmpty()) {
-                session.setAttribute("erreur", "ID de destination manquant.");
-                return;
-            }
-
-            int id = Integer.parseInt(idStr);
-
-            Destination destination = destinationDAO.getDestinationById(id);
-            String nomDestination = (destination != null) ? destination.getNom() : "ID " + id;
-
-            destinationDAO.delete(id);
-            session.setAttribute("messageSucces", "Destination '" + nomDestination + "' supprimée avec succès !");
-            System.out.println("Destination supprimée: " + nomDestination);
-
-        } catch (NumberFormatException e) {
-            session.setAttribute("erreur", "ID de destination invalide.");
-        } catch (Exception e) {
-            System.err.println("Erreur suppression destination: " + e.getMessage());
-            session.setAttribute("erreur", "Erreur lors de la suppression de la destination.");
         }
     }
 
@@ -599,7 +599,6 @@ public class AdminServlet extends HttpServlet {
                 }
             }
 
-            // 🆕 ENVOYER L'EMAIL D'APPROBATION
             try {
                 EmailService.envoyerEmailApprobation(guide.getEmail(), guide.getNomComplet());
                 System.out.println("📧 Email d'approbation envoyé à : " + guide.getEmail());
@@ -640,7 +639,6 @@ public class AdminServlet extends HttpServlet {
             boolean success = guideDAO.update(guide);
 
             if (success) {
-                // 🆕 ENVOYER L'EMAIL DE REFUS
                 try {
                     EmailService.envoyerEmailRefus(guide.getEmail(), guide.getNomComplet());
                     System.out.println("📧 Email de refus envoyé à : " + guide.getEmail());
@@ -663,26 +661,6 @@ public class AdminServlet extends HttpServlet {
             session.setAttribute("erreur", "Erreur lors du refus du guide.");
         }
     }
-//```
-//
-//        ---
-//
-//        ## 🚀 TESTE MAINTENANT
-//
-//**1. Rebuild le projet**
-//
-//            **2. Redémarre Tomcat**
-//
-//            **3. Connecte-toi en admin**
-//
-//            **4. Inscris un nouveau guide (ou utilise Paul Sareraka si tu l'as remis en "EN_ATTENTE")**
-//
-//            **5. Approuve ou refuse le guide**
-//
-//            **6. REGARDE LES LOGS TOMCAT ! Tu devrais voir :**
-//            ```
-//            📧 Email d'approbation envoyé à : email@example.com
-//            ✅ Email envoyé à : email@example.com
 
     private void suspendreGuide(HttpServletRequest request, HttpSession session) {
         try {
@@ -726,6 +704,134 @@ public class AdminServlet extends HttpServlet {
             System.err.println("❌ Erreur suspension guide: " + e.getMessage());
             e.printStackTrace();
             session.setAttribute("erreur", "Erreur lors de la suspension du guide.");
+        }
+    }
+
+    // ===== MÉTHODES DE GESTION DES PAYS =====
+
+    private void gererPays(HttpServletRequest request, HttpServletResponse response, String action)
+            throws ServletException, IOException {
+
+        HttpSession session = request.getSession();
+
+        try {
+            switch (action) {
+                case "pays-ajouter":
+                    ajouterPays(request, session);
+                    break;
+                case "pays-modifier":
+                    modifierPays(request, session);
+                    break;
+                case "pays-supprimer":
+                    supprimerPays(request, session);
+                    break;
+                default:
+                    session.setAttribute("erreur", "Action pays inconnue.");
+            }
+        } catch (Exception e) {
+            System.err.println("❌ Erreur gestion pays: " + e.getMessage());
+            e.printStackTrace();
+            session.setAttribute("erreur", "Erreur lors de l'opération sur le pays.");
+        }
+    }
+
+    private void ajouterPays(HttpServletRequest request, HttpSession session) {
+        String nom = request.getParameter("nom");
+        String code = request.getParameter("code");
+        String continent = request.getParameter("continent");
+
+        if (nom == null || nom.trim().isEmpty()) {
+            session.setAttribute("erreur", "Le nom du pays est obligatoire.");
+            return;
+        }
+
+        Pays pays = new Pays();
+        pays.setNom(nom.trim());
+
+        if (code != null && !code.trim().isEmpty()) {
+            pays.setCode(code.trim().toUpperCase());
+        }
+
+        if (continent != null && !continent.trim().isEmpty()) {
+            pays.setContinent(continent.trim());
+        }
+
+        boolean success = paysDAO.create(pays);
+
+        if (success) {
+            session.setAttribute("messageSucces", "Pays \"" + nom + "\" ajouté avec succès !");
+            System.out.println("✅ Pays ajouté: " + nom);
+        } else {
+            session.setAttribute("erreur", "Erreur lors de l'ajout du pays.");
+        }
+    }
+
+    private void modifierPays(HttpServletRequest request, HttpSession session) {
+        try {
+            String idStr = request.getParameter("id");
+            String nom = request.getParameter("nom");
+            String code = request.getParameter("code");
+            String continent = request.getParameter("continent");
+
+            if (idStr == null || nom == null || nom.trim().isEmpty()) {
+                session.setAttribute("erreur", "Données invalides pour la modification.");
+                return;
+            }
+
+            int id = Integer.parseInt(idStr);
+            Pays pays = paysDAO.findById(id);
+
+            if (pays == null) {
+                session.setAttribute("erreur", "Pays introuvable.");
+                return;
+            }
+
+            pays.setNom(nom.trim());
+            pays.setCode(code != null && !code.trim().isEmpty() ? code.trim().toUpperCase() : null);
+            pays.setContinent(continent != null && !continent.trim().isEmpty() ? continent.trim() : null);
+
+            boolean success = paysDAO.update(pays);
+
+            if (success) {
+                session.setAttribute("messageSucces", "Pays \"" + nom + "\" modifié avec succès !");
+                System.out.println("✅ Pays modifié: " + nom);
+            } else {
+                session.setAttribute("erreur", "Erreur lors de la modification du pays.");
+            }
+
+        } catch (NumberFormatException e) {
+            session.setAttribute("erreur", "ID de pays invalide.");
+        }
+    }
+
+    private void supprimerPays(HttpServletRequest request, HttpSession session) {
+        try {
+            String idStr = request.getParameter("id");
+
+            if (idStr == null || idStr.trim().isEmpty()) {
+                session.setAttribute("erreur", "ID de pays manquant.");
+                return;
+            }
+
+            int id = Integer.parseInt(idStr);
+            Pays pays = paysDAO.findById(id);
+
+            if (pays == null) {
+                session.setAttribute("erreur", "Pays introuvable.");
+                return;
+            }
+
+            boolean success = paysDAO.delete(id);
+
+            if (success) {
+                session.setAttribute("messageSucces", "Pays \"" + pays.getNom() + "\" supprimé avec succès !");
+                System.out.println("✅ Pays supprimé: " + pays.getNom());
+            } else {
+                session.setAttribute("erreur", "Erreur lors de la suppression du pays.");
+            }
+
+        } catch (NumberFormatException e) {
+            session.setAttribute("erreur", "ID de pays invalide.");
         }
     }
 }

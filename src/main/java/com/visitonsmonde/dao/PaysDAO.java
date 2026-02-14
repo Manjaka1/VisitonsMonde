@@ -379,4 +379,54 @@ public class PaysDAO {
             e.printStackTrace();
         }
     }
+    /**
+     * Créer un nouveau pays (alias pour AdminServlet)
+     */
+    public boolean create(Pays pays) {
+        try {
+            ajouterPays(pays);
+            return true;
+        } catch (SQLException e) {
+            System.err.println("❌ Erreur create pays: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Trouver un pays par ID (alias pour AdminServlet)
+     */
+    public Pays findById(int id) {
+        try {
+            return getPaysById(id);
+        } catch (SQLException e) {
+            System.err.println("❌ Erreur findById pays: " + e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Mettre à jour un pays (alias pour AdminServlet)
+     */
+    public boolean update(Pays pays) {
+        try {
+            modifierPays(pays);
+            return true;
+        } catch (SQLException e) {
+            System.err.println("❌ Erreur update pays: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Supprimer un pays (alias pour AdminServlet)
+     */
+    public boolean delete(int id) {
+        try {
+            supprimerPays(id);
+            return true;
+        } catch (SQLException e) {
+            System.err.println("❌ Erreur delete pays: " + e.getMessage());
+            return false;
+        }
+    }
 }

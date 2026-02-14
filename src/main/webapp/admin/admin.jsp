@@ -90,6 +90,11 @@
             <i class="fas fa-user-tie me-2"></i>Guides
           </a>
         </li>
+        <li class="nav-item mb-2">
+          <a href="#pays" class="nav-link text-white" data-bs-toggle="collapse">
+            <i class="fas fa-globe me-2"></i>Pays
+          </a>
+        </li>
       </ul>
 
       <hr class="my-4 bg-white">
@@ -521,6 +526,72 @@
           </div>
         </div>
       </div>
+      <!-- GESTION PAYS -->
+      <div class="collapse" id="pays">
+        <div class="admin-card p-4 mb-5">
+          <h3 class="mb-4"><i class="fas fa-globe text-primary me-2"></i>Gestion des Pays</h3>
+
+          <!-- Bouton Ajouter -->
+          <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#ajouterPaysModal">
+            <i class="fas fa-plus me-2"></i>Ajouter un pays
+          </button>
+
+          <!-- Tableau -->
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead class="table-dark">
+              <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Code</th>
+                <th>Continent</th>
+                <th>Nombre de destinations</th>
+                <th>Actions</th>
+              </tr>
+              </thead>
+              <tbody>
+              <% if (!paysList.isEmpty()) {
+                for (Pays pays : paysList) { %>
+              <tr>
+                <td><%= pays.getId() %></td>
+                <td><%= pays.getNom() %></td>
+                <td><%= pays.getCode() != null ? pays.getCode() : "-" %></td>
+                <td><%= pays.getContinent() != null ? pays.getContinent() : "-" %></td>
+                <td>
+                  <%
+                    int nbDest = 0;
+                    for (Destination d : destinations) {
+                      if (d.getPaysId() != null && d.getPaysId() == pays.getId()) {
+                        nbDest++;
+                      }
+                    }
+                  %>
+                  <span class="badge bg-primary"><%= nbDest %></span>
+                </td>
+                <td>
+                  <button class="btn btn-sm btn-warning"
+                          onclick="modifierPays(<%= pays.getId() %>, '<%= pays.getNom() %>', '<%= pays.getCode() != null ? pays.getCode() : "" %>', '<%= pays.getContinent() != null ? pays.getContinent() : "" %>')"
+                          title="Modifier">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="btn btn-sm btn-danger"
+                          onclick="supprimerPays(<%= pays.getId() %>, '<%= pays.getNom() %>')"
+                          title="Supprimer">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+              <% }
+              } else { %>
+              <tr>
+                <td colspan="6" class="text-center">Aucun pays</td>
+              </tr>
+              <% } %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -580,7 +651,94 @@
     </div>
   </div>
 </div>
+<!-- MODAL AJOUTER PAYS -->
+<div class="modal fade" id="ajouterPaysModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title">Ajouter un Pays</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <form method="post" action="admin">
+        <div class="modal-body">
+          <input type="hidden" name="action" value="pays-ajouter">
 
+          <div class="mb-3">
+            <label class="form-label">Nom *</label>
+            <input type="text" class="form-control" name="nom" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Code (ex: FR, US)</label>
+            <input type="text" class="form-control" name="code" maxlength="3">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Continent</label>
+            <select class="form-select" name="continent">
+              <option value="">-- Choisir --</option>
+              <option value="Afrique">Afrique</option>
+              <option value="Amérique du Nord">Amérique du Nord</option>
+              <option value="Amérique du Sud">Amérique du Sud</option>
+              <option value="Asie">Asie</option>
+              <option value="Europe">Europe</option>
+              <option value="Océanie">Océanie</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+          <button type="submit" class="btn btn-success">Ajouter</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL MODIFIER PAYS -->
+<div class="modal fade" id="modifierPaysModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-warning text-dark">
+        <h5 class="modal-title">Modifier un Pays</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form method="post" action="admin">
+        <div class="modal-body">
+          <input type="hidden" name="action" value="pays-modifier">
+          <input type="hidden" name="id" id="modif-pays-id">
+
+          <div class="mb-3">
+            <label class="form-label">Nom *</label>
+            <input type="text" class="form-control" name="nom" id="modif-pays-nom" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Code (ex: FR, US)</label>
+            <input type="text" class="form-control" name="code" id="modif-pays-code" maxlength="3">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Continent</label>
+            <select class="form-select" name="continent" id="modif-pays-continent">
+              <option value="">-- Choisir --</option>
+              <option value="Afrique">Afrique</option>
+              <option value="Amérique du Nord">Amérique du Nord</option>
+              <option value="Amérique du Sud">Amérique du Sud</option>
+              <option value="Asie">Asie</option>
+              <option value="Europe">Europe</option>
+              <option value="Océanie">Océanie</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+          <button type="submit" class="btn btn-warning">Modifier</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
   function supprimerDestination(id, nom) {
@@ -589,6 +747,27 @@
       form.method = 'POST';
       form.action = 'admin';
       form.innerHTML = '<input type="hidden" name="action" value="destination-supprimer">' +
+              '<input type="hidden" name="id" value="' + id + '">';
+      document.body.appendChild(form);
+      form.submit();
+    }
+  }
+  function modifierPays(id, nom, code, continent) {
+    document.getElementById('modif-pays-id').value = id;
+    document.getElementById('modif-pays-nom').value = nom;
+    document.getElementById('modif-pays-code').value = code;
+    document.getElementById('modif-pays-continent').value = continent;
+
+    var modal = new bootstrap.Modal(document.getElementById('modifierPaysModal'));
+    modal.show();
+  }
+
+  function supprimerPays(id, nom) {
+    if (confirm('Supprimer le pays "' + nom + '" ?\n\nATTENTION : Les destinations liées à ce pays ne seront pas supprimées.')) {
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = 'admin';
+      form.innerHTML = '<input type="hidden" name="action" value="pays-supprimer">' +
               '<input type="hidden" name="id" value="' + id + '">';
       document.body.appendChild(form);
       form.submit();
