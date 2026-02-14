@@ -118,33 +118,80 @@
       <% } %>
 
       <!-- STATISTIQUES -->
+      <!-- STATISTIQUES AMÉLIORÉES -->
       <div class="row g-4 mb-5">
         <div class="col-md-3">
-          <div class="stats-box">
-            <h3><%= destinations.size() %></h3>
-            <p class="mb-0"><i class="fas fa-map-marked-alt me-2"></i>Destinations</p>
+          <div class="stats-box" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <i class="fas fa-map-marked-alt fa-3x mb-3"></i>
+            <h2><%= destinations.size() %></h2>
+            <p class="mb-0">Destinations</p>
+            <small class="text-white-50">+<%= destinations.size() > 0 ? "2" : "0" %> ce mois</small>
           </div>
         </div>
         <div class="col-md-3">
-          <div class="stats-box">
-            <h3><%= reservations.size() %></h3>
-            <p class="mb-0"><i class="fas fa-calendar-check me-2"></i>Réservations</p>
+          <div class="stats-box" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+            <i class="fas fa-calendar-check fa-3x mb-3"></i>
+            <h2><%= reservations.size() %></h2>
+            <p class="mb-0">Réservations</p>
+            <%
+              int reservationsConfirmees = 0;
+              for (Reservation r : reservations) {
+                if ("confirmee".equals(r.getStatut())) reservationsConfirmees++;
+              }
+            %>
+            <small class="text-white-50"><%= reservationsConfirmees %> confirmées</small>
           </div>
         </div>
         <div class="col-md-3">
-          <div class="stats-box">
-            <h3><%= guides.size() %></h3>
-            <p class="mb-0"><i class="fas fa-user-tie me-2"></i>Guides</p>
+          <div class="stats-box" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+            <i class="fas fa-user-tie fa-3x mb-3"></i>
+            <h2><%= guides.size() %></h2>
+            <p class="mb-0">Guides</p>
+            <%
+              int guidesActifs = 0;
+              for (Guide g : guides) {
+                if ("ACTIF".equals(g.getStatut())) guidesActifs++;
+              }
+            %>
+            <small class="text-white-50"><%= guidesActifs %> actifs</small>
           </div>
         </div>
         <div class="col-md-3">
-          <div class="stats-box">
-            <h3><%= paysList.size() %></h3>
-            <p class="mb-0"><i class="fas fa-globe me-2"></i>Pays</p>
+          <div class="stats-box" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+            <i class="fas fa-euro-sign fa-3x mb-3"></i>
+            <%
+              double revenuTotal = 0;
+              for (Reservation r : reservations) {
+                if ("confirmee".equals(r.getStatut())) {
+                  revenuTotal += r.getPrixTotal().doubleValue();
+                }
+              }
+            %>
+            <h2><%= String.format("%.0f", revenuTotal) %>€</h2>
+            <p class="mb-0">Revenus</p>
+            <small class="text-white-50">Réservations confirmées</small>
           </div>
         </div>
       </div>
 
+      <!-- GRAPHIQUES -->
+      <div class="row g-4 mb-5">
+        <!-- Graphique Guides -->
+        <div class="col-lg-6">
+          <div class="admin-card p-4">
+            <h4 class="mb-4"><i class="fas fa-chart-pie text-primary me-2"></i>Répartition des Guides</h4>
+            <canvas id="guidesChart" style="max-height: 300px;"></canvas>
+          </div>
+        </div>
+
+        <!-- Graphique Réservations -->
+        <div class="col-lg-6">
+          <div class="admin-card p-4">
+            <h4 class="mb-4"><i class="fas fa-chart-bar text-success me-2"></i>Statut des Réservations</h4>
+            <canvas id="reservationsChart" style="max-height: 300px;"></canvas>
+          </div>
+        </div>
+      </div>
       <!-- GESTION DESTINATIONS -->
       <div class="collapse show" id="destinations">
         <div class="admin-card p-4 mb-5">
@@ -547,6 +594,112 @@
       form.submit();
     }
   }
+</script>
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<script>
+  // Données pour le graphique des guides
+  <%
+      int countEnAttente = 0, countActif = 0, countSuspendu = 0, countInactif = 0;
+      for (Guide g : guides) {
+          String statut = g.getStatut();
+          if ("EN_ATTENTE".equals(statut)) countEnAttente++;
+          else if ("ACTIF".equals(statut)) countActif++;
+          else if ("SUSPENDU".equals(statut)) countSuspendu++;
+          else if ("INACTIF".equals(statut)) countInactif++;
+      }
+  %>
+
+  const guidesData = {
+    labels: ['En Attente', 'Actifs', 'Suspendus', 'Inactifs'],
+    datasets: [{
+      data: [<%= countEnAttente %>, <%= countActif %>, <%= countSuspendu %>, <%= countInactif %>],
+      backgroundColor: [
+        'rgba(255, 193, 7, 0.8)',
+        'rgba(40, 167, 69, 0.8)',
+        'rgba(220, 53, 69, 0.8)',
+        'rgba(108, 117, 125, 0.8)'
+      ],
+      borderColor: [
+        'rgba(255, 193, 7, 1)',
+        'rgba(40, 167, 69, 1)',
+        'rgba(220, 53, 69, 1)',
+        'rgba(108, 117, 125, 1)'
+      ],
+      borderWidth: 2
+    }]
+  };
+
+  const guidesChart = new Chart(
+          document.getElementById('guidesChart'),
+          {
+            type: 'doughnut',
+            data: guidesData,
+            options: {
+              responsive: true,
+              plugins: {
+                legend: {
+                  position: 'bottom',
+                }
+              }
+            }
+          }
+  );
+
+  // Données pour le graphique des réservations
+  <%
+      int countEnAttente2 = 0, countConfirmee = 0, countAnnulee = 0;
+      for (Reservation r : reservations) {
+          String statut = r.getStatut();
+          if ("en_attente".equals(statut)) countEnAttente2++;
+          else if ("confirmee".equals(statut)) countConfirmee++;
+          else if ("annulee".equals(statut)) countAnnulee++;
+      }
+  %>
+
+  const reservationsData = {
+    labels: ['En Attente', 'Confirmées', 'Annulées'],
+    datasets: [{
+      label: 'Réservations',
+      data: [<%= countEnAttente2 %>, <%= countConfirmee %>, <%= countAnnulee %>],
+      backgroundColor: [
+        'rgba(255, 193, 7, 0.8)',
+        'rgba(40, 167, 69, 0.8)',
+        'rgba(220, 53, 69, 0.8)'
+      ],
+      borderColor: [
+        'rgba(255, 193, 7, 1)',
+        'rgba(40, 167, 69, 1)',
+        'rgba(220, 53, 69, 1)'
+      ],
+      borderWidth: 2
+    }]
+  };
+
+  const reservationsChart = new Chart(
+          document.getElementById('reservationsChart'),
+          {
+            type: 'bar',
+            data: reservationsData,
+            options: {
+              responsive: true,
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  ticks: {
+                    stepSize: 1
+                  }
+                }
+              },
+              plugins: {
+                legend: {
+                  display: false
+                }
+              }
+            }
+          }
+  );
 </script>
 </body>
 </html>

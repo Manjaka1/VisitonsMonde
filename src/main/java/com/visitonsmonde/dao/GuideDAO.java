@@ -78,6 +78,25 @@ public class GuideDAO {
         return null;
     }
 
+    public Guide findByUtilisateurId(int utilisateurId) {
+        String sql = "SELECT * FROM guides WHERE utilisateur_id = ?";
+
+        try (
+                Connection connection = getConnection();
+                PreparedStatement stmt = connection.prepareStatement(sql)
+        ) {
+            stmt.setInt(1, utilisateurId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return extractGuide(rs);
+            }
+        } catch (SQLException e) {
+            System.err.println("ERREUR findByUtilisateurId guide : " + e.getMessage());
+        }
+        return null;
+    }
+
     public List<Guide> findAll() {
         List<Guide> guides = new ArrayList<>();
         String sql = "SELECT * FROM guides ORDER BY nom, prenom";

@@ -1,34 +1,46 @@
 package com.visitonsmonde.servlet;
 
-
 import com.visitonsmonde.dao.GuideDAO;
 import com.visitonsmonde.dao.UtilisateurDAO;
 import com.visitonsmonde.model.Guide;
 import com.visitonsmonde.model.Utilisateur;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 @WebServlet("/devenir-guide")
+@MultipartConfig(
+        fileSizeThreshold = 1024 * 1024 * 2,  // 2MB
+        maxFileSize = 1024 * 1024 * 5,        // 5MB
+        maxRequestSize = 1024 * 1024 * 10     // 10MB
+)
 public class DevenirGuideServlet extends HttpServlet {
 
-    private GuideDAO guideDAO;
     private UtilisateurDAO utilisateurDAO;
+    private GuideDAO guideDAO;
 
     @Override
-    public void init() {
-        guideDAO = new GuideDAO();
+    public void init() throws ServletException {
+        super.init();
         utilisateurDAO = new UtilisateurDAO();
+        guideDAO = new GuideDAO();
+        System.out.println("✅ DevenirGuideServlet initialisé");
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Afficher le formulaire
         request.getRequestDispatcher("/devenir-guide.jsp").forward(request, response);
     }
 
@@ -38,7 +50,7 @@ public class DevenirGuideServlet extends HttpServlet {
 
         System.out.println("=== DEVENIR GUIDE SERVLET ===");
 
-        // Récupérer les paramètres
+        // Récupérer les données du formulaire
         String prenom = request.getParameter("prenom");
         String nom = request.getParameter("nom");
         String email = request.getParameter("email");
@@ -55,107 +67,156 @@ public class DevenirGuideServlet extends HttpServlet {
         System.out.println("Email: " + email);
         System.out.println("Spécialité: " + specialite);
 
-        // Validation
-        if (prenom == null || prenom.trim().isEmpty() ||
-                nom == null || nom.trim().isEmpty() ||
-                email == null || email.trim().isEmpty() ||
-                motDePasse == null || motDePasse.isEmpty() ||
-                confirmation == null || confirmation.isEmpty()) {
-
+        // Validation des champs obligatoires
+        if (prenom == null || nom == null || email == null || telephone == null ||
+                motDePasse == null || confirmation == null || specialite == null ||
+                experienceAnneesStr == null || languesParlees == null || description == null) {
             request.setAttribute("erreur", "Tous les champs obligatoires doivent être remplis.");
             request.getRequestDispatcher("/devenir-guide.jsp").forward(request, response);
             return;
         }
 
-        // Vérifier que les mots de passe correspondent
+        // Vérifier la correspondance des mots de passe
         if (!motDePasse.equals(confirmation)) {
             request.setAttribute("erreur", "Les mots de passe ne correspondent pas.");
             request.getRequestDispatcher("/devenir-guide.jsp").forward(request, response);
             return;
         }
 
-        // Vérifier la longueur du mot de passe
+        // Vérifier la longueur minimale du mot de passe
         if (motDePasse.length() < 6) {
             request.setAttribute("erreur", "Le mot de passe doit contenir au moins 6 caractères.");
             request.getRequestDispatcher("/devenir-guide.jsp").forward(request, response);
             return;
         }
 
+        // Convertir experienceAnnees en int
+        int experienceAnnees;
         try {
-            // Vérifier si l'email existe déjà
-            if (utilisateurDAO.emailExists(email)) {
-                request.setAttribute("erreur", "Un compte existe déjà avec cet email.");
-                request.getRequestDispatcher("/devenir-guide.jsp").forward(request, response);
-                return;
-            }
-
-            // 1. CRÉER LE COMPTE UTILISATEUR avec rôle GUIDE
-            Utilisateur utilisateur = new Utilisateur();
-            utilisateur.setPrenom(prenom.trim());
-            utilisateur.setNom(nom.trim());
-            utilisateur.setEmail(email.trim());
-            utilisateur.setMotDePasse(motDePasse);
-            utilisateur.setRole("GUIDE");
-            utilisateur.setEstActif(false); // Inactif tant que non validé par admin
-
-            boolean userCreated = utilisateurDAO.create(utilisateur);
-
-            if (!userCreated) {
-                request.setAttribute("erreur", "Erreur lors de la création du compte.");
-                request.getRequestDispatcher("/devenir-guide.jsp").forward(request, response);
-                return;
-            }
-
-            // Récupérer l'utilisateur créé pour avoir son ID
-            Utilisateur utilisateurCree = utilisateurDAO.findByEmail(email);
-
-            if (utilisateurCree == null) {
-                request.setAttribute("erreur", "Erreur lors de la récupération du compte.");
-                request.getRequestDispatcher("/devenir-guide.jsp").forward(request, response);
-                return;
-            }
-
-            // 2. CRÉER LA FICHE GUIDE
-            Guide guide = new Guide();
-            guide.setNom(nom.trim());
-            guide.setPrenom(prenom.trim());
-            guide.setEmail(email.trim());
-            guide.setTelephone(telephone != null ? telephone.trim() : "");
-            guide.setSpecialite(specialite);
-            guide.setLanguesParlees(languesParlees != null ? languesParlees.trim() : "");
-            guide.setDescription(description != null ? description.trim() : "");
-            guide.setUtilisateurId(utilisateurCree.getId());
-            guide.setStatut("EN_ATTENTE"); // Statut en attente de validation
-            guide.setUtilisateurId(utilisateur.getId());
-            // Gérer l'expérience
-            if (experienceAnneesStr != null && !experienceAnneesStr.trim().isEmpty()) {
-                guide.setExperienceAnnees(Integer.parseInt(experienceAnneesStr));
-            }
-
-            boolean guideCreated = guideDAO.create(guide);
-
-            if (guideCreated) {
-                System.out.println("✅ Candidature guide créée avec succès !");
-                System.out.println("   Email: " + email);
-                System.out.println("   Statut: EN_ATTENTE");
-
-                request.setAttribute("messageSucces",
-                        "Votre candidature a été envoyée avec succès ! " +
-                                "Notre équipe va l'examiner et vous recevrez un email dans les prochains jours. 🎉");
-                request.getRequestDispatcher("/devenir-guide.jsp").forward(request, response);
-            } else {
-                request.setAttribute("erreur", "Erreur lors de l'enregistrement de votre candidature.");
-                request.getRequestDispatcher("/devenir-guide.jsp").forward(request, response);
-            }
-
+            experienceAnnees = Integer.parseInt(experienceAnneesStr);
         } catch (NumberFormatException e) {
-            request.setAttribute("erreur", "Erreur dans les données numériques.");
+            request.setAttribute("erreur", "Années d'expérience invalides.");
             request.getRequestDispatcher("/devenir-guide.jsp").forward(request, response);
-        } catch (Exception e) {
-            System.err.println("❌ Erreur candidature guide: " + e.getMessage());
-            e.printStackTrace();
-            request.setAttribute("erreur", "Erreur technique. Veuillez réessayer.");
-            request.getRequestDispatcher("/devenir-guide.jsp").forward(request, response);
+            return;
         }
+
+        // Vérifier si l'email existe déjà
+        if (utilisateurDAO.emailExists(email)) {
+            request.setAttribute("erreur", "Cet email est déjà utilisé.");
+            request.getRequestDispatcher("/devenir-guide.jsp").forward(request, response);
+            return;
+        }
+
+        // Gérer l'upload de la photo
+        String photoFilename = null;
+        try {
+            Part photoPart = request.getPart("photo");
+            if (photoPart != null && photoPart.getSize() > 0) {
+                photoFilename = uploadPhoto(photoPart);
+                System.out.println("📸 Photo uploadée: " + photoFilename);
+            }
+        } catch (Exception e) {
+            System.err.println("⚠️ Erreur upload photo (continuons quand même): " + e.getMessage());
+        }
+
+        // Créer l'utilisateur
+        Utilisateur utilisateur = new Utilisateur();
+        utilisateur.setPrenom(prenom);
+        utilisateur.setNom(nom);
+        utilisateur.setEmail(email);
+        utilisateur.setMotDePasse(motDePasse);
+        utilisateur.setRole("GUIDE");
+        utilisateur.setEstActif(false); // Inactif jusqu'à approbation
+
+        boolean userCreated = utilisateurDAO.create(utilisateur);
+
+        if (!userCreated) {
+            request.setAttribute("erreur", "Erreur lors de la création du compte.");
+            request.getRequestDispatcher("/devenir-guide.jsp").forward(request, response);
+            return;
+        }
+
+        // Créer le guide
+        Guide guide = new Guide();
+        guide.setNom(nom);
+        guide.setPrenom(prenom);
+        guide.setEmail(email);
+        guide.setTelephone(telephone);
+        guide.setSpecialite(specialite);
+        guide.setExperienceAnnees(experienceAnnees);
+        guide.setLanguesParlees(languesParlees);
+        guide.setDescription(description);
+        guide.setStatut("EN_ATTENTE");
+        guide.setUtilisateurId(utilisateur.getId());
+
+        // Ajouter le nom de la photo si elle a été uploadée
+        if (photoFilename != null) {
+            guide.setPhoto(photoFilename);
+        }
+
+        boolean guideCreated = guideDAO.create(guide);
+
+        if (guideCreated) {
+            System.out.println("✅ Candidature guide créée avec succès !");
+            System.out.println("   Email: " + email);
+            System.out.println("   Statut: EN_ATTENTE");
+            if (photoFilename != null) {
+                System.out.println("   Photo: " + photoFilename);
+            }
+
+            request.setAttribute("messageSucces",
+                    "Votre candidature a été envoyée avec succès ! " +
+                            "Notre équipe va l'examiner et vous recevrez un email dans les prochains jours. 🎉");
+        } else {
+            request.setAttribute("erreur", "Erreur lors de la création de votre fiche guide.");
+        }
+
+        request.getRequestDispatcher("/devenir-guide.jsp").forward(request, response);
+    }
+
+    /**
+     * Upload la photo et retourne le nom du fichier
+     */
+    private String uploadPhoto(Part photoPart) throws IOException {
+        // Récupérer le nom original du fichier
+        String originalFilename = getFileName(photoPart);
+
+        // Générer un nom unique
+        String extension = "";
+        if (originalFilename != null && originalFilename.contains(".")) {
+            extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+        }
+        String uniqueFilename = "guide-" + System.currentTimeMillis() + extension;
+
+        // Chemin de destination
+        String uploadPath = getServletContext().getRealPath("/") + "img" + File.separator + "guides";
+
+        // Créer le dossier s'il n'existe pas
+        File uploadDir = new File(uploadPath);
+        if (!uploadDir.exists()) {
+            uploadDir.mkdirs();
+            System.out.println("📁 Dossier créé: " + uploadPath);
+        }
+
+        // Sauvegarder le fichier
+        Path filePath = Paths.get(uploadPath, uniqueFilename);
+        Files.copy(photoPart.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+        System.out.println("✅ Photo sauvegardée: " + filePath);
+
+        return "guides/" + uniqueFilename;
+    }
+
+    /**
+     * Extraire le nom du fichier de la Part
+     */
+    private String getFileName(Part part) {
+        String contentDisposition = part.getHeader("content-disposition");
+        for (String content : contentDisposition.split(";")) {
+            if (content.trim().startsWith("filename")) {
+                return content.substring(content.indexOf("=") + 2, content.length() - 1);
+            }
+        }
+        return null;
     }
 }

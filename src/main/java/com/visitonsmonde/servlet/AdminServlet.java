@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import com.visitonsmonde.service.EmailService;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -598,6 +599,14 @@ public class AdminServlet extends HttpServlet {
                 }
             }
 
+            // 🆕 ENVOYER L'EMAIL D'APPROBATION
+            try {
+                EmailService.envoyerEmailApprobation(guide.getEmail(), guide.getNomComplet());
+                System.out.println("📧 Email d'approbation envoyé à : " + guide.getEmail());
+            } catch (Exception e) {
+                System.err.println("⚠️ Erreur envoi email (mais approbation réussie) : " + e.getMessage());
+            }
+
             session.setAttribute("messageSucces",
                     "Guide " + guide.getNomComplet() + " approuvé avec succès ! Le compte est maintenant actif.");
             System.out.println("✅ Guide approuvé: " + guide.getNomComplet());
@@ -631,6 +640,14 @@ public class AdminServlet extends HttpServlet {
             boolean success = guideDAO.update(guide);
 
             if (success) {
+                // 🆕 ENVOYER L'EMAIL DE REFUS
+                try {
+                    EmailService.envoyerEmailRefus(guide.getEmail(), guide.getNomComplet());
+                    System.out.println("📧 Email de refus envoyé à : " + guide.getEmail());
+                } catch (Exception e) {
+                    System.err.println("⚠️ Erreur envoi email (mais refus enregistré) : " + e.getMessage());
+                }
+
                 session.setAttribute("messageSucces",
                         "Candidature de " + guide.getNomComplet() + " refusée.");
                 System.out.println("❌ Guide refusé: " + guide.getNomComplet());
@@ -646,6 +663,26 @@ public class AdminServlet extends HttpServlet {
             session.setAttribute("erreur", "Erreur lors du refus du guide.");
         }
     }
+//```
+//
+//        ---
+//
+//        ## 🚀 TESTE MAINTENANT
+//
+//**1. Rebuild le projet**
+//
+//            **2. Redémarre Tomcat**
+//
+//            **3. Connecte-toi en admin**
+//
+//            **4. Inscris un nouveau guide (ou utilise Paul Sareraka si tu l'as remis en "EN_ATTENTE")**
+//
+//            **5. Approuve ou refuse le guide**
+//
+//            **6. REGARDE LES LOGS TOMCAT ! Tu devrais voir :**
+//            ```
+//            📧 Email d'approbation envoyé à : email@example.com
+//            ✅ Email envoyé à : email@example.com
 
     private void suspendreGuide(HttpServletRequest request, HttpSession session) {
         try {

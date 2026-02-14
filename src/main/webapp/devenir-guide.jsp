@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: manjaka
-  Date: 11/08/2025
-  Time: 23:41
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="fr">
@@ -39,6 +32,13 @@
     }
     .benefit-card:hover {
       transform: translateY(-5px);
+    }
+    .preview-photo {
+      max-width: 200px;
+      max-height: 200px;
+      border-radius: 10px;
+      margin-top: 10px;
+      display: none;
     }
   </style>
 </head>
@@ -79,7 +79,7 @@
     </div>
     <% } %>
 
-    <form method="post" action="devenir-guide">
+    <form method="post" action="devenir-guide" enctype="multipart/form-data">
       <div class="row g-3">
         <div class="col-md-6">
           <label class="form-label">Prénom *</label>
@@ -143,6 +143,19 @@
                     placeholder="Parlez de votre expérience, votre passion, ce qui vous rend unique..."></textarea>
         </div>
 
+        <!-- 🆕 PHOTO DE PROFIL -->
+        <div class="col-12">
+          <label class="form-label">
+            <i class="fas fa-camera text-primary me-2"></i>Photo de profil
+            <span class="text-muted">(optionnel)</span>
+          </label>
+          <input type="file" class="form-control" name="photo" id="photoInput" accept="image/*">
+          <small class="text-muted">
+            Formats acceptés : JPG, PNG, GIF (max 5MB)
+          </small>
+          <img id="photoPreview" class="preview-photo" alt="Aperçu">
+        </div>
+
         <div class="col-12">
           <div class="form-check">
             <input class="form-check-input" type="checkbox" id="acceptConditions" required>
@@ -188,5 +201,20 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Prévisualisation de la photo
+  document.getElementById('photoInput').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const preview = document.getElementById('photoPreview');
+        preview.src = e.target.result;
+        preview.style.display = 'block';
+      }
+      reader.readAsDataURL(file);
+    }
+  });
+</script>
 </body>
 </html>
