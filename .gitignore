@@ -14,7 +14,8 @@ build/
 # IntelliJ IDEA
 .idea/
 *.iws
-*.iml
+*.imlGasikarako1&
+
 *.ipr
 out/
 
