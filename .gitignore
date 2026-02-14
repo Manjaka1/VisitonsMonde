@@ -1,0 +1,66 @@
+# Build artifacts
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+*.class
+*.war
+*.ear
+*.jar
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+
+# Eclipse
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# VS Code
+.vscode/
+
+# Tomcat
+*.log
+logs/
+
+# MacOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Kotlin
+.kotlin
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*~
+
+# IMPORTANT - NE PAS COMMIT LES MOTS DE PASSE !
+# Si tu as des fichiers de config avec mot de passe DB, ajoute-les ici
+# Exemple:
+# src/main/resources/database.properties
