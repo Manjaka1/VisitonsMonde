@@ -456,73 +456,281 @@
       </div>
 
       <!-- GESTION RÉSERVATIONS -->
+      <!-- GESTION RÉSERVATIONS -->
       <div class="collapse" id="reservations">
         <div class="admin-card p-4 mb-5">
           <h3 class="mb-4"><i class="fas fa-calendar-check me-2"></i>Gestion des Réservations</h3>
 
-          <div class="table-responsive">
-            <table class="table table-hover">
-              <thead class="table-dark">
-              <tr>
-                <th>Numéro</th>
-                <th>Client ID</th>
-                <th>Destination ID</th>
-                <th>Date Départ</th>
-                <th>Prix Total</th>
-                <th>Statut</th>
-                <th>Actions</th>
-              </tr>
-              </thead>
-              <tbody>
-              <% if (!reservations.isEmpty()) {
-                for (Reservation res : reservations) { %>
-              <tr>
-                <td><code><%= res.getNumeroReservation() %></code></td>
-                <td>Client #<%= res.getUtilisateurId() %></td>
-                <td>Dest. #<%= res.getDestinationId() %></td>
-                <td><%= res.getDateDepart() %></td>
-                <td><%= String.format("%.2f €", res.getPrixTotal()) %></td>
-                <td>
-                  <% if ("en_attente".equals(res.getStatut())) { %>
-                  <span class="badge bg-warning">En attente</span>
-                  <% } else if ("confirmee".equals(res.getStatut())) { %>
-                  <span class="badge bg-success">Confirmée</span>
-                  <% } else if ("annulee".equals(res.getStatut())) { %>
-                  <span class="badge bg-danger">Annulée</span>
-                  <% } else { %>
-                  <span class="badge bg-secondary"><%= res.getStatut() %></span>
-                  <% } %>
-                </td>
-                <td>
-                  <% if (!"confirmee".equals(res.getStatut())) { %>
-                  <form method="post" action="admin" style="display:inline;">
-                    <input type="hidden" name="action" value="reservation-confirmer">
-                    <input type="hidden" name="id" value="<%= res.getId() %>">
-                    <button type="submit" class="btn btn-sm btn-success" title="Confirmer">
-                      <i class="fas fa-check"></i>
-                    </button>
-                  </form>
-                  <% } %>
+          <!-- Filtres -->
+          <ul class="nav nav-tabs mb-4">
+            <li class="nav-item">
+              <a class="nav-link active" data-bs-toggle="tab" href="#reservations-attente">
+                En Attente <span class="badge bg-warning ms-2">
+                    <%
+                      int countResAttente = 0;
+                      for (Reservation r : reservations) {
+                        if ("en_attente".equals(r.getStatut())) countResAttente++;
+                      }
+                    %>
+                    <%= countResAttente %>
+                    </span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-bs-toggle="tab" href="#reservations-confirmees">
+                Confirmées <span class="badge bg-success ms-2">
+                    <%
+                      int countResConfirmees = 0;
+                      for (Reservation r : reservations) {
+                        if ("confirmee".equals(r.getStatut())) countResConfirmees++;
+                      }
+                    %>
+                    <%= countResConfirmees %>
+                    </span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-bs-toggle="tab" href="#reservations-annulees">
+                Annulées <span class="badge bg-danger ms-2">
+                    <%
+                      int countResAnnulees = 0;
+                      for (Reservation r : reservations) {
+                        if ("annulee".equals(r.getStatut())) countResAnnulees++;
+                      }
+                    %>
+                    <%= countResAnnulees %>
+                    </span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-bs-toggle="tab" href="#reservations-toutes">
+                Toutes <span class="badge bg-secondary ms-2"><%= reservations.size() %></span>
+              </a>
+            </li>
+          </ul>
 
-                  <% if (!"annulee".equals(res.getStatut())) { %>
-                  <form method="post" action="admin" style="display:inline;">
-                    <input type="hidden" name="action" value="reservation-annuler">
-                    <input type="hidden" name="id" value="<%= res.getId() %>">
-                    <button type="submit" class="btn btn-sm btn-danger" title="Annuler">
-                      <i class="fas fa-times"></i>
-                    </button>
-                  </form>
+          <div class="tab-content">
+            <!-- RÉSERVATIONS EN ATTENTE -->
+            <div class="tab-pane fade show active" id="reservations-attente">
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead class="table-warning">
+                  <tr>
+                    <th>Numéro</th>
+                    <th>Client ID</th>
+                    <th>Destination ID</th>
+                    <th>Date Départ</th>
+                    <th>Prix Total</th>
+                    <th>Actions</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <%
+                    boolean hasResAttente = false;
+                    for (Reservation res : reservations) {
+                      if ("en_attente".equals(res.getStatut())) {
+                        hasResAttente = true;
+                  %>
+                  <tr>
+                    <td><code><%= res.getNumeroReservation() %></code></td>
+                    <td>Client #<%= res.getUtilisateurId() %></td>
+                    <td>Dest. #<%= res.getDestinationId() %></td>
+                    <td><%= res.getDateDepart() %></td>
+                    <td><strong><%= String.format("%.2f €", res.getPrixTotal()) %></strong></td>
+                    <td>
+                      <form method="post" action="admin" style="display:inline;">
+                        <input type="hidden" name="action" value="reservation-confirmer">
+                        <input type="hidden" name="id" value="<%= res.getId() %>">
+                        <button type="submit" class="btn btn-sm btn-success" title="Confirmer">
+                          <i class="fas fa-check"></i> Confirmer
+                        </button>
+                      </form>
+                      <form method="post" action="admin" style="display:inline;">
+                        <input type="hidden" name="action" value="reservation-annuler">
+                        <input type="hidden" name="id" value="<%= res.getId() %>">
+                        <button type="submit" class="btn btn-sm btn-danger" title="Annuler">
+                          <i class="fas fa-times"></i> Annuler
+                        </button>
+                      </form>
+                    </td>
+                  </tr>
+                  <%
+                      }
+                    }
+                    if (!hasResAttente) {
+                  %>
+                  <tr>
+                    <td colspan="6" class="text-center">Aucune réservation en attente</td>
+                  </tr>
                   <% } %>
-                </td>
-              </tr>
-              <% }
-              } else { %>
-              <tr>
-                <td colspan="7" class="text-center">Aucune réservation</td>
-              </tr>
-              <% } %>
-              </tbody>
-            </table>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- RÉSERVATIONS CONFIRMÉES -->
+            <div class="tab-pane fade" id="reservations-confirmees">
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead class="table-success">
+                  <tr>
+                    <th>Numéro</th>
+                    <th>Client ID</th>
+                    <th>Destination ID</th>
+                    <th>Date Départ</th>
+                    <th>Prix Total</th>
+                    <th>Actions</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <%
+                    boolean hasResConfirmees = false;
+                    for (Reservation res : reservations) {
+                      if ("confirmee".equals(res.getStatut())) {
+                        hasResConfirmees = true;
+                  %>
+                  <tr>
+                    <td><code><%= res.getNumeroReservation() %></code></td>
+                    <td>Client #<%= res.getUtilisateurId() %></td>
+                    <td>Dest. #<%= res.getDestinationId() %></td>
+                    <td><%= res.getDateDepart() %></td>
+                    <td><strong class="text-success"><%= String.format("%.2f €", res.getPrixTotal()) %></strong></td>
+                    <td>
+                      <form method="post" action="admin" style="display:inline;">
+                        <input type="hidden" name="action" value="reservation-annuler">
+                        <input type="hidden" name="id" value="<%= res.getId() %>">
+                        <button type="submit" class="btn btn-sm btn-danger" title="Annuler">
+                          <i class="fas fa-times"></i> Annuler
+                        </button>
+                      </form>
+                    </td>
+                  </tr>
+                  <%
+                      }
+                    }
+                    if (!hasResConfirmees) {
+                  %>
+                  <tr>
+                    <td colspan="6" class="text-center">Aucune réservation confirmée</td>
+                  </tr>
+                  <% } %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- RÉSERVATIONS ANNULÉES -->
+            <div class="tab-pane fade" id="reservations-annulees">
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead class="table-danger">
+                  <tr>
+                    <th>Numéro</th>
+                    <th>Client ID</th>
+                    <th>Destination ID</th>
+                    <th>Date Départ</th>
+                    <th>Prix Total</th>
+                    <th>Actions</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <%
+                    boolean hasResAnnulees = false;
+                    for (Reservation res : reservations) {
+                      if ("annulee".equals(res.getStatut())) {
+                        hasResAnnulees = true;
+                  %>
+                  <tr>
+                    <td><code><%= res.getNumeroReservation() %></code></td>
+                    <td>Client #<%= res.getUtilisateurId() %></td>
+                    <td>Dest. #<%= res.getDestinationId() %></td>
+                    <td><%= res.getDateDepart() %></td>
+                    <td><%= String.format("%.2f €", res.getPrixTotal()) %></td>
+                    <td>
+                      <span class="badge bg-danger">Annulée</span>
+                    </td>
+                  </tr>
+                  <%
+                      }
+                    }
+                    if (!hasResAnnulees) {
+                  %>
+                  <tr>
+                    <td colspan="6" class="text-center">Aucune réservation annulée</td>
+                  </tr>
+                  <% } %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- TOUTES LES RÉSERVATIONS -->
+            <div class="tab-pane fade" id="reservations-toutes">
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead class="table-dark">
+                  <tr>
+                    <th>Numéro</th>
+                    <th>Client ID</th>
+                    <th>Destination ID</th>
+                    <th>Date Départ</th>
+                    <th>Prix Total</th>
+                    <th>Statut</th>
+                    <th>Actions</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <% if (!reservations.isEmpty()) {
+                    for (Reservation res : reservations) { %>
+                  <tr>
+                    <td><code><%= res.getNumeroReservation() %></code></td>
+                    <td>Client #<%= res.getUtilisateurId() %></td>
+                    <td>Dest. #<%= res.getDestinationId() %></td>
+                    <td><%= res.getDateDepart() %></td>
+                    <td><%= String.format("%.2f €", res.getPrixTotal()) %></td>
+                    <td>
+                      <% if ("en_attente".equals(res.getStatut())) { %>
+                      <span class="badge bg-warning">En attente</span>
+                      <% } else if ("confirmee".equals(res.getStatut())) { %>
+                      <span class="badge bg-success">Confirmée</span>
+                      <% } else if ("annulee".equals(res.getStatut())) { %>
+                      <span class="badge bg-danger">Annulée</span>
+                      <% } else { %>
+                      <span class="badge bg-secondary"><%= res.getStatut() %></span>
+                      <% } %>
+                    </td>
+                    <td>
+                      <% if (!"confirmee".equals(res.getStatut())) { %>
+                      <form method="post" action="admin" style="display:inline;">
+                        <input type="hidden" name="action" value="reservation-confirmer">
+                        <input type="hidden" name="id" value="<%= res.getId() %>">
+                        <button type="submit" class="btn btn-sm btn-success" title="Confirmer">
+                          <i class="fas fa-check"></i>
+                        </button>
+                      </form>
+                      <% } %>
+
+                      <% if (!"annulee".equals(res.getStatut())) { %>
+                      <form method="post" action="admin" style="display:inline;">
+                        <input type="hidden" name="action" value="reservation-annuler">
+                        <input type="hidden" name="id" value="<%= res.getId() %>">
+                        <button type="submit" class="btn btn-sm btn-danger" title="Annuler">
+                          <i class="fas fa-times"></i>
+                        </button>
+                      </form>
+                      <% } %>
+                    </td>
+                  </tr>
+                  <% }
+                  } else { %>
+                  <tr>
+                    <td colspan="7" class="text-center">Aucune réservation</td>
+                  </tr>
+                  <% } %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
       </div>
