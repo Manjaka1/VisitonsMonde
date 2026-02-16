@@ -1244,3 +1244,39 @@
     background: var(--bs-dark) !important;
 }
 /*** copyright end ***/
+
+/* ==========================================
+   GUIDES PAGE STYLES
+   ========================================== */
+.guide-card {
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    height: 100%;
+    background: white;
+}
+
+.guide-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.stats-box {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.stats-box i {
+    font-size: 3rem;
+    margin-bottom: 15px;
+}
+
+.stats-box h2 {
+    font-size: 3rem;
+    font-weight: bold;
+    margin: 10px 0;
+}
