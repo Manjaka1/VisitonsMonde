@@ -1,6 +1,5 @@
 package com.visitonsmonde.servlet;
 
-
 import com.visitonsmonde.dao.ReservationDAO;
 import com.visitonsmonde.model.Reservation;
 import com.visitonsmonde.model.Utilisateur;
@@ -18,7 +17,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 
 @WebServlet("/reservations")
-class ReservationServlet extends HttpServlet {
+public class ReservationServlet extends HttpServlet {  // ✅ PUBLIC !
 
     private ReservationDAO reservationDAO;
 
@@ -54,6 +53,13 @@ class ReservationServlet extends HttpServlet {
             System.out.println("🔴 Action non reconnue: " + request.getParameter("action"));
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Action non reconnue");
         }
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // Afficher la page de réservations (si nécessaire)
+        request.getRequestDispatcher("/reservations.jsp").forward(request, response);
     }
 
     private void creerReservation(HttpServletRequest request, HttpServletResponse response)
@@ -114,17 +120,18 @@ class ReservationServlet extends HttpServlet {
             BigDecimal prixTotal = prixDestination.multiply(new BigDecimal(nbPersonnes));
             reservation.setPrixTotal(prixTotal);
             reservation.setStatut("en_attente");
+
             // Récupérer l'utilisateur connecté
             HttpSession session = request.getSession();
             Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateur");
 
             if (utilisateur != null) {
-                reservation.setUtilisateurId(utilisateur.getId()); // VRAI ID utilisateur
+                reservation.setUtilisateurId(utilisateur.getId());
             } else {
                 // Rediriger vers login si pas connecté
                 response.sendRedirect("login.jsp");
                 return;
-            } // ID temporaire
+            }
 
             System.out.println("📋 Réservation préparée: " + reservation);
 
@@ -145,7 +152,7 @@ class ReservationServlet extends HttpServlet {
                         URLEncoder.encode(dateDepart.toString(), "UTF-8"),
                         nbPersonnes,
                         URLEncoder.encode(prixTotal.toString(), "UTF-8"),
-                        URLEncoder.encode(new java.util.Date().toString(), "UTF-8") // Date actuelle
+                        URLEncoder.encode(new java.util.Date().toString(), "UTF-8")
                 );
 
                 System.out.println("🔗 Redirection vers: " + redirectUrl);

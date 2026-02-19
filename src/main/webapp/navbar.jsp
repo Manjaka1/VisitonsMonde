@@ -34,6 +34,9 @@
                 <a href="${pageContext.request.contextPath}/destinations" class="nav-item nav-link">
                     <i class="fas fa-map-marked-alt me-1"></i>Destinations
                 </a>
+                <a href="${pageContext.request.contextPath}/guides" class="nav-item nav-link">
+                    <i class="fas fa-user-tie me-1"></i>Guides
+                </a>
                 <a href="${pageContext.request.contextPath}/about.jsp" class="nav-item nav-link">
                     <i class="fas fa-info-circle me-1"></i>À Propos
                 </a>

@@ -123,7 +123,7 @@
                                 <a href="tour.jsp" class="dropdown-item">Explore Tour</a>
                                 <a href="booking.jsp" class="dropdown-item">Travel Booking</a>
                                 <a href="gallery.jsp" class="dropdown-item">Our Gallery</a>
-                                <a href="guides.jsp" class="dropdown-item">Travel Guides</a>
+                                <a href="${pageContext.request.contextPath}/guides" class="dropdown-item">Travel Guides</a>
                                 <a href="testimonial.jsp" class="dropdown-item">Testimonial</a>
                                 <a href="404.jsp" class="dropdown-item">404 Page</a>
                             </div>

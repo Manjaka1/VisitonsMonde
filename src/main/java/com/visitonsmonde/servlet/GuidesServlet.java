@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@WebServlet("/guides")
+@WebServlet(name = "GuidesServlet", urlPatterns = {"/guides"}, loadOnStartup = 1)
 public class GuidesServlet extends HttpServlet {
 
     private GuideDAO guideDAO;
@@ -33,12 +33,21 @@ public class GuidesServlet extends HttpServlet {
         try {
             // Récupérer TOUS les guides
             List<Guide> tousLesGuides = guideDAO.findAll();
+            System.out.println("📊 Total guides en BDD : " + tousLesGuides.size());
+
+            // DEBUG - Afficher le statut de chaque guide
+            for (Guide g : tousLesGuides) {
+                System.out.println("  - Guide #" + g.getId() + " : " + g.getNomComplet() + " → Statut: [" + g.getStatut() + "]");
+            }
 
             // Filtrer pour ne garder que les guides ACTIFS
             List<Guide> guidesActifs = new ArrayList<>();
             for (Guide guide : tousLesGuides) {
                 if ("ACTIF".equals(guide.getStatut())) {
                     guidesActifs.add(guide);
+                    System.out.println("  ✅ Guide ACTIF ajouté : " + guide.getNomComplet());
+                } else {
+                    System.out.println("  ❌ Guide IGNORÉ (statut: " + guide.getStatut() + ") : " + guide.getNomComplet());
                 }
             }
 

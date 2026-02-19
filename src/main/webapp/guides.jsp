@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.visitonsmonde.model.Guide" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.math.BigDecimal" %>
 <%
     List<Guide> guides = (List<Guide>) request.getAttribute("guides");
     if (guides == null) guides = new java.util.ArrayList<>();
@@ -33,7 +34,6 @@
 
     <!-- Template Stylesheet -->
     <link href="${pageContext.request.contextPath}/css/style.css" rel="stylesheet">
-
 </head>
 
 <body>
@@ -77,55 +77,12 @@
         <% } %>
 
         <% if (guides.isEmpty()) { %>
-        <!-- État vide avec design -->
         <div class="text-center py-5">
             <i class="fas fa-users fa-5x text-muted mb-4"></i>
             <h3 class="text-muted">Aucun guide disponible pour le moment</h3>
             <p class="text-muted">Nos guides sont en cours de validation. Revenez bientôt !</p>
         </div>
         <% } else { %>
-
-        <!-- Statistiques -->
-        <div class="row g-4 mb-5">
-            <div class="col-md-4">
-                <div class="stats-box text-center">
-                    <i class="fas fa-user-tie"></i>
-                    <h2><%= guides.size() %></h2>
-                    <p class="mb-0">Guides Professionnels</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="stats-box text-center" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
-                    <i class="fas fa-language"></i>
-                    <%
-                        java.util.Set<String> langues = new java.util.HashSet<>();
-                        for (Guide g : guides) {
-                            if (g.getLanguesParlees() != null) {
-                                String[] langs = g.getLanguesParlees().split(",");
-                                for (String l : langs) {
-                                    langues.add(l.trim());
-                                }
-                            }
-                        }
-                    %>
-                    <h2><%= langues.size() %></h2>
-                    <p class="mb-0">Langues Parlées</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="stats-box text-center" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
-                    <i class="fas fa-award"></i>
-                    <%
-                        int experienceTotal = 0;
-                        for (Guide g : guides) {
-                            experienceTotal += g.getExperienceAnnees();
-                        }
-                    %>
-                    <h2><%= experienceTotal %>+</h2>
-                    <p class="mb-0">Années d'Expérience Cumulées</p>
-                </div>
-            </div>
-        </div>
 
         <!-- Grille des guides -->
         <div class="row g-4">
@@ -145,10 +102,24 @@
                             <% } %>
                         </div>
                         <div class="guide-icon rounded-pill p-2">
-                            <a class="btn btn-square btn-primary rounded-circle mx-1" href=""><i class="fab fa-facebook-f"></i></a>
-                            <a class="btn btn-square btn-primary rounded-circle mx-1" href=""><i class="fab fa-twitter"></i></a>
-                            <a class="btn btn-square btn-primary rounded-circle mx-1" href=""><i class="fab fa-instagram"></i></a>
-                            <a class="btn btn-square btn-primary rounded-circle mx-1" href=""><i class="fab fa-linkedin-in"></i></a>
+                            <% if (guide.getEmail() != null && !guide.getEmail().isEmpty()) { %>
+                            <a class="btn btn-square btn-primary rounded-circle mx-1"
+                               href="mailto:<%= guide.getEmail() %>" title="Email">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                            <% } %>
+                            <% if (guide.getTelephone() != null && !guide.getTelephone().isEmpty()) { %>
+                            <a class="btn btn-square btn-primary rounded-circle mx-1"
+                               href="tel:<%= guide.getTelephone() %>" title="Téléphone">
+                                <i class="fas fa-phone"></i>
+                            </a>
+                            <% } %>
+                            <a class="btn btn-square btn-primary rounded-circle mx-1" href="#" title="Facebook">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a class="btn btn-square btn-primary rounded-circle mx-1" href="#" title="Instagram">
+                                <i class="fab fa-instagram"></i>
+                            </a>
                         </div>
                     </div>
                     <div class="guide-title text-center rounded-bottom p-4">
@@ -168,12 +139,24 @@
                             </div>
                             <% } %>
 
-                            <% if (guide.getNoteMoyenne() != null) { %>
-                            <div class="text-warning">
-                                <% for(int i = 0; i < 5; i++) { %>
-                                <i class="fas fa-star <%= (i < guide.getNoteMoyenne()) ? "" : "text-muted" %>"></i>
+                            <% if (guide.getNoteMoyenne() != null) {
+                                int noteInt = guide.getNoteMoyenne().intValue();
+                            %>
+                            <div class="text-warning mt-2">
+                                <% for(int i = 1; i <= 5; i++) { %>
+                                <i class="fas fa-star <%= (i <= noteInt) ? "" : "text-muted" %>"></i>
                                 <% } %>
                                 <span class="text-dark ms-2">(<%= guide.getNoteMoyenne() %>/5)</span>
+                            </div>
+                            <% } %>
+
+                            <% if (guide.getDescription() != null && !guide.getDescription().isEmpty()) { %>
+                            <div class="mt-3">
+                                <p class="text-muted small mb-0">
+                                    <%= guide.getDescription().length() > 100 ?
+                                            guide.getDescription().substring(0, 100) + "..." :
+                                            guide.getDescription() %>
+                                </p>
                             </div>
                             <% } %>
                         </div>
