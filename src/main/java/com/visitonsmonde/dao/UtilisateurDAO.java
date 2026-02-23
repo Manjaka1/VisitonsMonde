@@ -2,6 +2,7 @@ package com.visitonsmonde.dao;
 
 import com.visitonsmonde.model.Utilisateur;
 import com.visitonsmonde.config.DAOFactory;
+import com.visitonsmonde.util.PasswordUtil;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -23,7 +24,9 @@ public class UtilisateurDAO {
             stmt.setString(1, utilisateur.getNom());
             stmt.setString(2, utilisateur.getPrenom());
             stmt.setString(3, utilisateur.getEmail());
-            stmt.setString(4, utilisateur.getMotDePasse());
+            // ✅ HACHAGE DU MOT DE PASSE AVEC BCRYPT
+            String hashedPassword = PasswordUtil.hashPassword(utilisateur.getMotDePasse());
+            stmt.setString(4, hashedPassword);
             stmt.setString(5, utilisateur.getRole());
             stmt.setBoolean(6, utilisateur.isEstActif());
 
@@ -40,40 +43,45 @@ public class UtilisateurDAO {
                     utilisateur.setDateInscription(created.getDateInscription());
                 }
 
-                System.out.println("Utilisateur créé avec succès : " + utilisateur.getEmail());
+                System.out.println("✅ Utilisateur créé avec mot de passe haché : " + utilisateur.getEmail());
                 return true;
             }
         } catch (SQLException e) {
-            System.err.println("ERREUR lors de la création de l'utilisateur : " + e.getMessage());
+            System.err.println("❌ ERREUR lors de la création de l'utilisateur : " + e.getMessage());
         }
 
         return false;
     }
 
     public Utilisateur authenticate(String email, String motDePasse) {
-        String sql = "SELECT * FROM utilisateurs WHERE email = ? AND mot_de_passe = ? AND est_actif = TRUE";
+        // ✅ On ne compare PLUS directement le mot de passe dans le SQL !
+        String sql = "SELECT * FROM utilisateurs WHERE email = ? AND est_actif = TRUE";
 
         try (
                 Connection connection = getConnection();
                 PreparedStatement stmt = connection.prepareStatement(sql)
         ) {
             stmt.setString(1, email);
-            stmt.setString(2, motDePasse);
 
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                Utilisateur user = extractUtilisateurFromResultSet(rs);
-                System.out.println("Authentification réussie pour : " + email);
+                String hashedPasswordFromDB = rs.getString("mot_de_passe");
 
-                updateLastConnection(user.getId());
-
-                return user;
+                // ✅ VÉRIFICATION AVEC BCRYPT !
+                if (PasswordUtil.checkPassword(motDePasse, hashedPasswordFromDB)) {
+                    Utilisateur user = extractUtilisateurFromResultSet(rs);
+                    System.out.println("✅ Authentification réussie pour : " + email);
+                    updateLastConnection(user.getId());
+                    return user;
+                } else {
+                    System.out.println("❌ Mot de passe incorrect pour : " + email);
+                }
             } else {
-                System.out.println("Échec d'authentification pour : " + email);
+                System.out.println("❌ Email non trouvé : " + email);
             }
         } catch (SQLException e) {
-            System.err.println("ERREUR lors de l'authentification : " + e.getMessage());
+            System.err.println("❌ ERREUR lors de l'authentification : " + e.getMessage());
         }
 
         return null;
@@ -244,11 +252,13 @@ public class UtilisateurDAO {
                 Connection connection = getConnection();
                 PreparedStatement stmt = connection.prepareStatement(sql)
         ) {
-            stmt.setString(1, nouveauMotDePasse);
+            // ✅ HACHAGE DU NOUVEAU MOT DE PASSE !
+            String hashedPassword = PasswordUtil.hashPassword(nouveauMotDePasse);
+            stmt.setString(1, hashedPassword);
             stmt.setInt(2, id);
 
             if (stmt.executeUpdate() > 0) {
-                System.out.println("Mot de passe mis à jour pour l'utilisateur #" + id);
+                System.out.println("✅ Mot de passe haché mis à jour pour l'utilisateur #" + id);
                 return true;
             }
         } catch (SQLException e) {

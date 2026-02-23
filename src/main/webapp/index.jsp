@@ -1831,6 +1831,7 @@
         <!-- Template Javascript -->
         <script src="${pageContext.request.contextPath}/js/main.js"></script>
         <!-- Modal Login -->
+        <!-- Modal Login -->
         <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -1839,6 +1840,17 @@
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
+                        <!-- MESSAGE D'ERREUR -->
+                        <%
+                            String erreurLogin = (String) request.getAttribute("erreurLogin");
+                            if (erreurLogin != null) {
+                        %>
+                        <div class="alert alert-danger alert-dismissible fade show">
+                            <i class="fas fa-exclamation-circle me-2"></i><%= erreurLogin %>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                        <% } %>
+
                         <form action="login" method="post">
                             <div class="mb-3">
                                 <label class="form-label">Email</label>
@@ -1857,6 +1869,16 @@
                 </div>
             </div>
         </div>
+
+        <!-- Script pour rouvrir automatiquement le modal en cas d'erreur -->
+        <% if (erreurLogin != null) { %>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+                loginModal.show();
+            });
+        </script>
+        <% } %>
 
         <!-- Modal Register -->
         <div class="modal fade" id="registerModal" tabindex="-1" aria-hidden="true">

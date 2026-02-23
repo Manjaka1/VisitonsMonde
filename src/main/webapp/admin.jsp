@@ -85,8 +85,11 @@
       </ul>
 
       <hr class="my-4 bg-white">
-      <a href="${pageContext.request.contextPath}/index.jsp" class="btn btn-outline-light btn-sm">
+      <a href="${pageContext.request.contextPath}/index.jsp" class="btn btn-outline-light btn-sm mb-2 w-100">
         <i class="fas fa-home me-2"></i>Retour au site
+      </a>
+      <a href="${pageContext.request.contextPath}/logout" class="btn btn-danger btn-sm w-100">
+        <i class="fas fa-sign-out-alt me-2"></i>Déconnexion
       </a>
     </div>
 

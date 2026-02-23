@@ -54,13 +54,15 @@ public class LoginServlet extends HttpServlet {
             } else {
                 // Échec de connexion
                 System.out.println("❌ Échec de connexion pour: " + email);
-                request.setAttribute("erreur", "Email ou mot de passe incorrect");
+                // ✅ CHANGÉ : "erreur" → "erreurLogin"
+                request.setAttribute("erreurLogin", "Email ou mot de passe incorrect");
                 request.getRequestDispatcher("/index.jsp").forward(request, response);
             }
         } catch (Exception e) {
             System.err.println("❌ Erreur de connexion: " + e.getMessage());
             e.printStackTrace();
-            request.setAttribute("erreur", "Erreur de connexion. Veuillez réessayer.");
+            // ✅ CHANGÉ : "erreur" → "erreurLogin"
+            request.setAttribute("erreurLogin", "Erreur de connexion. Veuillez réessayer.");
             request.getRequestDispatcher("/index.jsp").forward(request, response);
         }
     }
