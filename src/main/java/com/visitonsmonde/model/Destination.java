@@ -24,6 +24,7 @@ public class Destination {
     private Integer typeTourId;       // ID du type de tour
     private String typeTour;          // Nom du type de tour
 
+
     // Constructeur vide (obligatoire)
     public Destination() {
     }

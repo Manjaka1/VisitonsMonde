@@ -17,6 +17,7 @@ public class Reservation {
     private String statut;
     private Timestamp dateReservation;
     private String destinationNom;
+    private String destinationPays;
     private String guideNom;
     private String clientNom;
     private String clientPrenom;
@@ -145,6 +146,13 @@ public class Reservation {
     public void setClientEmail(String clientEmail) {
         this.clientEmail = clientEmail;
     }
+    public String getDestinationPays() {
+        return destinationPays;
+    }
+
+    public void setDestinationPays(String destinationPays) {
+        this.destinationPays = destinationPays;
+    }
 
     // Méthode utilitaire
     public String getClientNomComplet() {
@@ -152,5 +160,14 @@ public class Reservation {
             return clientPrenom + " " + clientNom;
         }
         return "Client non défini";
+    }
+    // Méthode utilitaire pour avoir "Destination, Pays"
+    public String getDestinationComplete() {
+        if (destinationNom != null && destinationPays != null) {
+            return destinationNom + ", " + destinationPays;
+        } else if (destinationNom != null) {
+            return destinationNom;
+        }
+        return "Destination #" + destinationId;
     }
 }

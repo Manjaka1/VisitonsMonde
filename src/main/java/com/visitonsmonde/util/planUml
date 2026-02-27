@@ -1,0 +1,36 @@
+@startuml
+actor Client
+participant "BookingServlet" as Servlet
+participant "ReservationDAO" as DAO
+participant "DestinationDAO" as DestDAO
+database "Base de données" as DB
+
+Client -> Servlet: POST /booking (destinationId, dates, nbPersonnes)
+activate Servlet
+
+Servlet -> DestDAO: getDestinationById(destinationId)
+activate DestDAO
+DestDAO -> DB: SELECT destination WHERE id = ?
+activate DB
+DB --> DestDAO: Destination
+deactivate DB
+DestDAO --> Servlet: Destination
+deactivate DestDAO
+
+Servlet -> Servlet: Calculer prix total
+Servlet -> Servlet: Générer numéro réservation
+
+Servlet -> DAO: insert(reservation)
+activate DAO
+DAO -> DB: INSERT INTO reservations
+activate DB
+DB --> DAO: ID réservation
+deactivate DB
+DAO --> Servlet: Reservation créée
+deactivate DAO
+
+Servlet -> Servlet: Créer session utilisateur
+Servlet --> Client: Redirection confirmation
+deactivate Servlet
+
+@enduml

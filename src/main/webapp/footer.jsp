@@ -41,7 +41,7 @@
                     <a href="${pageContext.request.contextPath}/destinations">
                         <i class="fas fa-angle-right me-2"></i> Destinations
                     </a>
-                    <a href="${pageContext.request.contextPath}/guides.jsp">
+                    <a href="${pageContext.request.contextPath}/guides">
                         <i class="fas fa-angle-right me-2"></i> Nos Guides
                     </a>
                     <a href="${pageContext.request.contextPath}/contact.jsp">

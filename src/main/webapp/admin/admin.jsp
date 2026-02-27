@@ -224,6 +224,7 @@
               <% if (!destinations.isEmpty()) {
                 for (Destination dest : destinations) { %>
               <tr>
+
                 <td><%= dest.getId() %></td>
                 <td><%= dest.getNom() %></td>
                 <td><%= dest.getPays() != null ? dest.getPays() : "-" %></td>
@@ -517,8 +518,8 @@
                   <thead class="table-warning">
                   <tr>
                     <th>Numéro</th>
-                    <th>Client ID</th>
-                    <th>Destination ID</th>
+                    <th>Client </th>
+                    <th>Destination </th>
                     <th>Date Départ</th>
                     <th>Prix Total</th>
                     <th>Actions</th>
@@ -533,8 +534,8 @@
                   %>
                   <tr>
                     <td><code><%= res.getNumeroReservation() %></code></td>
-                    <td>Client #<%= res.getUtilisateurId() %></td>
-                    <td>Dest. #<%= res.getDestinationId() %></td>
+                    <td><%= res.getClientNomComplet() %></td>
+                    <td><%= res.getDestinationComplete() %></td>
                     <td><%= res.getDateDepart() %></td>
                     <td><strong><%= String.format("%.2f €", res.getPrixTotal()) %></strong></td>
                     <td>
@@ -591,8 +592,8 @@
                   %>
                   <tr>
                     <td><code><%= res.getNumeroReservation() %></code></td>
-                    <td>Client #<%= res.getUtilisateurId() %></td>
-                    <td>Dest. #<%= res.getDestinationId() %></td>
+                    <td><%= res.getClientNomComplet() %></td>
+                    <td><%= res.getDestinationComplete() %></td>
                     <td><%= res.getDateDepart() %></td>
                     <td><strong class="text-success"><%= String.format("%.2f €", res.getPrixTotal()) %></strong></td>
                     <td>
@@ -642,8 +643,8 @@
                   %>
                   <tr>
                     <td><code><%= res.getNumeroReservation() %></code></td>
-                    <td>Client #<%= res.getUtilisateurId() %></td>
-                    <td>Dest. #<%= res.getDestinationId() %></td>
+                    <td><%= res.getClientNomComplet() %></td>
+                    <td><%= res.getDestinationComplete() %></td>
                     <td><%= res.getDateDepart() %></td>
                     <td><%= String.format("%.2f €", res.getPrixTotal()) %></td>
                     <td>
@@ -684,8 +685,8 @@
                     for (Reservation res : reservations) { %>
                   <tr>
                     <td><code><%= res.getNumeroReservation() %></code></td>
-                    <td>Client #<%= res.getUtilisateurId() %></td>
-                    <td>Dest. #<%= res.getDestinationId() %></td>
+                    <td><%= res.getClientNomComplet() %></td>
+                    <td><%= res.getDestinationComplete() %></td>
                     <td><%= res.getDateDepart() %></td>
                     <td><%= String.format("%.2f €", res.getPrixTotal()) %></td>
                     <td>

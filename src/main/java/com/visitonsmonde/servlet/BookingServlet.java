@@ -41,6 +41,9 @@ public class BookingServlet extends HttpServlet {
             List<Destination> destinations = destinationDAO.selectAll();
             request.setAttribute("destinations", destinations);
 
+            System.out.println("🔗 Connexion établie à la base de données");
+            System.out.println("📋 " + destinations.size() + " destinations chargées pour booking.jsp");
+
             // Récupérer la destination pré-sélectionnée (si venant de packages)
             String destinationParam = request.getParameter("destination");
             if (destinationParam != null) {
@@ -51,13 +54,22 @@ public class BookingServlet extends HttpServlet {
             request.getRequestDispatcher("booking.jsp").forward(request, response);
 
         } catch (SQLException e) {
-            System.err.println("Erreur SQL dans BookingServlet GET : " + e.getMessage());
+            System.err.println("❌ Erreur SQL dans BookingServlet GET : " + e.getMessage());
             e.printStackTrace();
-            response.sendRedirect("packages.jsp");
+
+            // ✅ CORRECTION : On forward quand même vers booking.jsp avec une liste vide
+            request.setAttribute("destinations", new java.util.ArrayList<>());
+            request.setAttribute("erreur", "Erreur de chargement des destinations");
+            request.getRequestDispatcher("booking.jsp").forward(request, response);
+
         } catch (Exception e) {
-            System.err.println("Erreur dans BookingServlet GET : " + e.getMessage());
+            System.err.println("❌ Erreur dans BookingServlet GET : " + e.getMessage());
             e.printStackTrace();
-            response.sendRedirect("packages.jsp");
+
+            // ✅ CORRECTION : On forward quand même vers booking.jsp
+            request.setAttribute("destinations", new java.util.ArrayList<>());
+            request.setAttribute("erreur", "Erreur technique");
+            request.getRequestDispatcher("booking.jsp").forward(request, response);
         }
     }
 
@@ -123,7 +135,6 @@ public class BookingServlet extends HttpServlet {
             reservation.setDateDepart(sqlDateDepart);
             reservation.setNbPersonnes(nbPersonnes);
             reservation.setPrixTotal(prixTotal);
-            // Le statut sera automatiquement mis à "en_attente" dans le DAO
 
             // Sauvegarder la réservation
             boolean success = reservationDAO.create(reservation);
@@ -135,26 +146,25 @@ public class BookingServlet extends HttpServlet {
                                 "Numéro de réservation : " + reservation.getNumeroReservation() +
                                 ". Vous recevrez une confirmation par email.");
 
-                // Optionnel : stocker les détails de la réservation pour affichage
                 session.setAttribute("derniereReservation", reservation);
                 session.setAttribute("destinationReservee", destination);
 
-                response.sendRedirect("booking.jsp");
+                response.sendRedirect("booking");  // ✅ Redirige vers doGet pour recharger les destinations
             } else {
                 throw new Exception("Erreur lors de l'enregistrement de la réservation");
             }
 
         } catch (NumberFormatException e) {
             session.setAttribute("erreur", "Données numériques invalides");
-            response.sendRedirect("booking.jsp");
+            response.sendRedirect("booking");
         } catch (IllegalArgumentException e) {
             session.setAttribute("erreur", "Date invalide");
-            response.sendRedirect("booking.jsp");
+            response.sendRedirect("booking");
         } catch (Exception e) {
-            System.err.println("Erreur dans BookingServlet POST : " + e.getMessage());
+            System.err.println("❌ Erreur dans BookingServlet POST : " + e.getMessage());
             e.printStackTrace();
             session.setAttribute("erreur", "Erreur : " + e.getMessage());
-            response.sendRedirect("booking.jsp");
+            response.sendRedirect("booking");
         }
     }
 }

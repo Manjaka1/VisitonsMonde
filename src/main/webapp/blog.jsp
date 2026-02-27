@@ -249,74 +249,8 @@
 <!-- Subscribe End -->
 
 <!-- Footer Start -->
-<div class="container-fluid footer py-5">
-    <div class="container py-5">
-        <div class="row g-5">
-            <div class="col-md-6 col-lg-6 col-xl-3">
-                <div class="footer-item d-flex flex-column">
-                    <h4 class="mb-4 text-white">Contact</h4>
-                    <a href=""><i class="fas fa-home me-2"></i> 123 Rue de la Paix, Paris</a>
-                    <a href="mailto:info@triphive.fr"><i class="fas fa-envelope me-2"></i> info@triphive.fr</a>
-                    <a href="tel:+33123456789"><i class="fas fa-phone me-2"></i> +33 1 23 45 67 89</a>
-                    <a href="" class="mb-3"><i class="fas fa-print me-2"></i> +33 1 23 45 67 90</a>
-                    <div class="d-flex align-items-center">
-                        <i class="fas fa-share fa-2x text-white me-2"></i>
-                        <a class="btn-square btn btn-primary rounded-circle mx-1" href=""><i class="fab fa-facebook-f"></i></a>
-                        <a class="btn-square btn btn-primary rounded-circle mx-1" href=""><i class="fab fa-twitter"></i></a>
-                        <a class="btn-square btn btn-primary rounded-circle mx-1" href=""><i class="fab fa-instagram"></i></a>
-                        <a class="btn-square btn btn-primary rounded-circle mx-1" href=""><i class="fab fa-linkedin-in"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-6 col-xl-3">
-                <div class="footer-item d-flex flex-column">
-                    <h4 class="mb-4 text-white">Entreprise</h4>
-                    <a href="about.jsp"><i class="fas fa-angle-right me-2"></i> À Propos</a>
-                    <a href="#"><i class="fas fa-angle-right me-2"></i> Carrières</a>
-                    <a href="blog.jsp"><i class="fas fa-angle-right me-2"></i> Blog</a>
-                    <a href="#"><i class="fas fa-angle-right me-2"></i> Presse</a>
-                    <a href="#"><i class="fas fa-angle-right me-2"></i> Partenaires</a>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-6 col-xl-3">
-                <div class="footer-item d-flex flex-column">
-                    <h4 class="mb-4 text-white">Support</h4>
-                    <a href="contact.jsp"><i class="fas fa-angle-right me-2"></i> Contact</a>
-                    <a href="#"><i class="fas fa-angle-right me-2"></i> Mentions Légales</a>
-                    <a href="#"><i class="fas fa-angle-right me-2"></i> Politique de Confidentialité</a>
-                    <a href="#"><i class="fas fa-angle-right me-2"></i> CGV</a>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-6 col-xl-3">
-                <div class="footer-item">
-                    <h4 class="text-white mb-3">Moyens de Paiement</h4>
-                    <div class="footer-bank-card">
-                        <a href="#" class="text-white me-2"><i class="fab fa-cc-visa fa-2x"></i></a>
-                        <a href="#" class="text-white me-2"><i class="fab fa-cc-mastercard fa-2x"></i></a>
-                        <a href="#" class="text-white me-2"><i class="fab fa-cc-paypal fa-2x"></i></a>
-                        <a href="#" class="text-white me-2"><i class="fab fa-cc-amex fa-2x"></i></a>
-                        <a href="#" class="text-white"><i class="fas fa-credit-card fa-2x"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Footer End -->
 
-<!-- Copyright Start -->
-<div class="container-fluid copyright text-body py-4">
-    <div class="container">
-        <div class="row g-4 align-items-center">
-            <div class="col-md-6 text-center text-md-end mb-md-0">
-                <i class="fas fa-copyright me-2"></i><a class="text-white" href="#">TripHive</a>, Tous droits réservés.
-            </div>
-            <div class="col-md-6 text-center text-md-start">
-                Votre partenaire voyage de confiance
-            </div>
-        </div>
-    </div>
-</div>
+<jsp:include page="footer.jsp" />
 <!-- Copyright End -->
 
 <!-- Back to Top -->

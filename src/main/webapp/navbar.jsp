@@ -5,7 +5,6 @@
   Time: 00:23
   To change this template use File | Settings | File Templates.
 --%>
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.visitonsmonde.model.Utilisateur" %>
 <%
@@ -14,6 +13,65 @@
     boolean isAdmin = isConnected && (navbarUser.isAdmin() || "ADMIN".equals(navbarUser.getRole()));
     boolean isGuide = isConnected && "GUIDE".equals(navbarUser.getRole());
 %>
+
+<!-- Topbar Start -->
+<div class="container-fluid bg-primary px-5 d-none d-lg-block">
+    <div class="row gx-0">
+        <div class="col-lg-8 text-center text-lg-start mb-2 mb-lg-0">
+            <div class="d-inline-flex align-items-center" style="height: 45px;">
+                <% if (isConnected) { %>
+                <!-- SI CONNECTÉ -->
+                <span class="text-light me-3">
+                    <i class="fa fa-user me-2"></i>Bonjour, <%= navbarUser.getPrenom() %> !
+                </span>
+                <% } else { %>
+                <!-- SI NON CONNECTÉ - Réseaux sociaux -->
+                <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href=""><i class="fab fa-twitter fw-normal"></i></a>
+                <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href=""><i class="fab fa-facebook-f fw-normal"></i></a>
+                <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href=""><i class="fab fa-linkedin-in fw-normal"></i></a>
+                <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href=""><i class="fab fa-instagram fw-normal"></i></a>
+                <% } %>
+            </div>
+        </div>
+        <div class="col-lg-4 text-center text-lg-end">
+            <div class="d-inline-flex align-items-center" style="height: 45px;">
+                <% if (isConnected) { %>
+                <!-- SI CONNECTÉ -->
+                <div class="dropdown">
+                    <a href="#" class="dropdown-toggle text-light" data-bs-toggle="dropdown">
+                        <small><i class="fa fa-home me-2"></i>Mon Espace</small>
+                    </a>
+                    <div class="dropdown-menu rounded">
+                        <% if (isAdmin) { %>
+                        <a href="${pageContext.request.contextPath}/admin" class="dropdown-item">
+                            <i class="fas fa-user-shield me-2"></i>Admin
+                        </a>
+                        <% } %>
+                        <a href="${pageContext.request.contextPath}/mon-profil.jsp" class="dropdown-item">
+                            <i class="fas fa-user-alt me-2"></i>Mon Profil
+                        </a>
+                        <a href="${pageContext.request.contextPath}/mes-reservations" class="dropdown-item">
+                            <i class="fas fa-suitcase me-2"></i>Mes Réservations
+                        </a>
+                        <a href="${pageContext.request.contextPath}/logout" class="dropdown-item">
+                            <i class="fas fa-power-off me-2"></i>Déconnexion
+                        </a>
+                    </div>
+                </div>
+                <% } else { %>
+                <!-- SI NON CONNECTÉ -->
+                <a href="${pageContext.request.contextPath}/login.jsp" class="text-light me-3">
+                    <small><i class="fa fa-sign-in-alt me-2"></i>Connexion</small>
+                </a>
+                <a href="${pageContext.request.contextPath}/register.jsp" class="text-light">
+                    <small><i class="fa fa-user-plus me-2"></i>S'inscrire</small>
+                </a>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Topbar End -->
 
 <!-- Navbar & Hero Start -->
 <div class="container-fluid position-relative p-0">
@@ -34,8 +92,22 @@
                 <a href="${pageContext.request.contextPath}/destinations" class="nav-item nav-link">
                     <i class="fas fa-map-marked-alt me-1"></i>Destinations
                 </a>
+
+                <% if (isConnected) { %>
+                <!-- Menu pour utilisateurs connectés -->
                 <a href="${pageContext.request.contextPath}/guides" class="nav-item nav-link">
                     <i class="fas fa-user-tie me-1"></i>Guides
+                </a>
+                <% } %>
+
+                <a href="${pageContext.request.contextPath}/packages.jsp" class="nav-item nav-link">
+                    <i class="fas fa-box me-1"></i>Forfaits
+                </a>
+                <a href="${pageContext.request.contextPath}/services.jsp" class="nav-item nav-link">
+                    <i class="fas fa-concierge-bell me-1"></i>Services
+                </a>
+                <a href="${pageContext.request.contextPath}/blog.jsp" class="nav-item nav-link">
+                    <i class="fas fa-blog me-1"></i>Blog
                 </a>
                 <a href="${pageContext.request.contextPath}/about.jsp" class="nav-item nav-link">
                     <i class="fas fa-info-circle me-1"></i>À Propos
@@ -104,8 +176,11 @@
             </div>
             <% } else { %>
             <!-- VISITEUR NON CONNECTÉ -->
-            <a href="${pageContext.request.contextPath}/login.jsp" class="btn btn-primary rounded-pill py-2 px-4 ms-3">
+            <a href="${pageContext.request.contextPath}/login.jsp" class="btn btn-outline-primary rounded-pill py-2 px-4 ms-3">
                 <i class="fas fa-sign-in-alt me-2"></i>Connexion
+            </a>
+            <a href="${pageContext.request.contextPath}/register.jsp" class="btn btn-primary rounded-pill py-2 px-4 ms-2">
+                <i class="fas fa-user-plus me-2"></i>S'inscrire
             </a>
             <% } %>
         </div>

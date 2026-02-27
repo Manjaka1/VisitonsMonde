@@ -182,18 +182,47 @@ public class ReservationDAO {
      */
     public List<Reservation> findAll() {
         List<Reservation> reservations = new ArrayList<>();
-        String sql = "SELECT * FROM reservations ORDER BY date_reservation DESC";
+        String sql = "SELECT r.*, " +
+                "u.nom as client_nom, u.prenom as client_prenom, u.email as client_email, " +
+                "d.nom as destination_nom, d.pays as destination_pays, " +
+                "g.nom as guide_nom " +
+                "FROM reservations r " +
+                "LEFT JOIN utilisateurs u ON r.utilisateur_id = u.id " +
+                "LEFT JOIN destinations d ON r.destination_id = d.id " +
+                "LEFT JOIN guides g ON r.guide_id = g.id " +
+                "ORDER BY r.date_reservation DESC";
 
-        try (Connection connection = getConnection();
-             Statement stmt = connection.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+        try (Connection conn = DAOFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                reservations.add(extractReservationFromResultSet(rs));
+                Reservation reservation = new Reservation();
+                reservation.setId(rs.getInt("id"));
+                reservation.setNumeroReservation(rs.getString("numero_reservation"));
+                reservation.setUtilisateurId(rs.getInt("utilisateur_id"));
+                reservation.setDestinationId(rs.getInt("destination_id"));
+                reservation.setGuideId((Integer) rs.getObject("guide_id"));
+                reservation.setDateDepart(rs.getDate("date_depart"));
+                reservation.setNbPersonnes(rs.getInt("nb_personnes"));
+                reservation.setPrixTotal(rs.getBigDecimal("prix_total"));
+                reservation.setStatut(rs.getString("statut"));
+                reservation.setDateReservation(rs.getTimestamp("date_reservation"));
+
+                // DONNÉES JOINTES
+                reservation.setClientNom(rs.getString("client_nom"));
+                reservation.setClientPrenom(rs.getString("client_prenom"));
+                reservation.setClientEmail(rs.getString("client_email"));
+                reservation.setDestinationNom(rs.getString("destination_nom"));
+                reservation.setDestinationPays(rs.getString("destination_pays"));
+                reservation.setGuideNom(rs.getString("guide_nom"));
+
+                reservations.add(reservation);
             }
         } catch (SQLException e) {
-            System.err.println("Erreur lors de la récupération des réservations : " + e.getMessage());
+            e.printStackTrace();
         }
+
         return reservations;
     }
 
@@ -202,23 +231,50 @@ public class ReservationDAO {
      */
     public List<Reservation> findByUtilisateur(int utilisateurId) {
         List<Reservation> reservations = new ArrayList<>();
-        String sql = "SELECT r.*, d.nom as destination_nom, g.nom as guide_nom, g.prenom as guide_prenom "
-                + "FROM reservations r "
-                + "LEFT JOIN destinations d ON r.destination_id = d.id "
-                + "LEFT JOIN guides g ON r.guide_id = g.id "
-                + "WHERE r.utilisateur_id = ? ORDER BY r.date_reservation DESC";
+        String sql = "SELECT r.*, " +
+                "u.nom as client_nom, u.prenom as client_prenom, u.email as client_email, " +
+                "d.nom as destination_nom, d.pays as destination_pays, " +
+                "g.nom as guide_nom " +
+                "FROM reservations r " +
+                "LEFT JOIN utilisateurs u ON r.utilisateur_id = u.id " +
+                "LEFT JOIN destinations d ON r.destination_id = d.id " +
+                "LEFT JOIN guides g ON r.guide_id = g.id " +
+                "WHERE r.utilisateur_id = ? " +
+                "ORDER BY r.date_reservation DESC";
 
-        try (Connection connection = getConnection();
-             PreparedStatement stmt = connection.prepareStatement(sql)) {
+        try (Connection conn = DAOFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
             stmt.setInt(1, utilisateurId);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                reservations.add(extractReservationFromResultSet(rs));
+                Reservation reservation = new Reservation();
+                reservation.setId(rs.getInt("id"));
+                reservation.setNumeroReservation(rs.getString("numero_reservation"));
+                reservation.setUtilisateurId(rs.getInt("utilisateur_id"));
+                reservation.setDestinationId(rs.getInt("destination_id"));
+                reservation.setGuideId((Integer) rs.getObject("guide_id"));
+                reservation.setDateDepart(rs.getDate("date_depart"));
+                reservation.setNbPersonnes(rs.getInt("nb_personnes"));
+                reservation.setPrixTotal(rs.getBigDecimal("prix_total"));
+                reservation.setStatut(rs.getString("statut"));
+                reservation.setDateReservation(rs.getTimestamp("date_reservation"));
+
+                // DONNÉES JOINTES
+                reservation.setClientNom(rs.getString("client_nom"));
+                reservation.setClientPrenom(rs.getString("client_prenom"));
+                reservation.setClientEmail(rs.getString("client_email"));
+                reservation.setDestinationNom(rs.getString("destination_nom"));
+                reservation.setDestinationPays(rs.getString("destination_pays"));
+                reservation.setGuideNom(rs.getString("guide_nom"));
+
+                reservations.add(reservation);
             }
         } catch (SQLException e) {
-            System.err.println("Erreur lors de la récupération des réservations utilisateur : " + e.getMessage());
+            e.printStackTrace();
         }
+
         return reservations;
     }
 
