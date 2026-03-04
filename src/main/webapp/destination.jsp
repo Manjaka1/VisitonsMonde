@@ -51,7 +51,7 @@
 <!-- Header End -->
 
 <!-- Destination Start -->
-<div class="container-fluid destination py-5">
+<div class="container-fluid py-5">
     <div class="container py-5">
         <div class="mx-auto text-center mb-5" style="max-width: 900px;">
             <h5 class="section-title px-3">Destinations</h5>
@@ -65,31 +65,27 @@
                     for (Destination dest : destinations) {
             %>
             <div class="col-lg-4 col-md-6">
-                <div class="destination-img">
-                    <img class="img-fluid rounded w-100"
+                <div class="card h-100 shadow-sm">
+                    <img class="card-img-top"
                          src="${pageContext.request.contextPath}/img/<%= dest.getImage() != null && !dest.getImage().isEmpty() ? dest.getImage() : "default-destination.jpg" %>"
                          alt="<%= dest.getNom() %>"
-                         style="height: 300px; object-fit: cover;">
-                    <div class="destination-overlay p-4">
-                        <h4 class="text-white mb-2 mt-3"><%= dest.getNom() %></h4>
-                        <p class="text-white mb-3">
+                         onerror="this.src='${pageContext.request.contextPath}/img/default-destination.jpg'"
+                         style="height: 250px; object-fit: cover;">
+
+                    <div class="card-body">
+                        <h5 class="card-title"><%= dest.getNom() %></h5>
+                        <p class="card-text text-muted">
                             <i class="fa fa-map-marker-alt me-2"></i>
                             <%= dest.getPays() != null ? dest.getPays() : "International" %>
                         </p>
                         <% if (dest.getPrix() != null) { %>
-                        <h5 class="text-white mb-3">
+                        <p class="text-primary fw-bold fs-5">
                             À partir de <%= String.format("%.0f", dest.getPrix()) %> €
-                        </h5>
+                        </p>
                         <% } %>
-                        <a href="destinations?action=view&id=<%= dest.getId() %>"
-                           class="btn btn-primary text-white rounded-pill border py-2 px-4">
+                        <a href="destination-details?id=<%= dest.getId() %>"
+                           class="btn btn-primary w-100">
                             <i class="fa fa-eye me-2"></i>Voir les détails
-                        </a>
-                    </div>
-                    <div class="search-icon">
-                        <a href="${pageContext.request.contextPath}/img/<%= dest.getImage() != null && !dest.getImage().isEmpty() ? dest.getImage() : "default-destination.jpg" %>"
-                           data-lightbox="destination-<%= dest.getId() %>">
-                            <i class="fa fa-plus-square fa-1x btn btn-light btn-lg-square text-primary"></i>
                         </a>
                     </div>
                 </div>

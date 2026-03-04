@@ -184,11 +184,12 @@ public class ReservationDAO {
         List<Reservation> reservations = new ArrayList<>();
         String sql = "SELECT r.*, " +
                 "u.nom as client_nom, u.prenom as client_prenom, u.email as client_email, " +
-                "d.nom as destination_nom, d.pays as destination_pays, " +
+                "d.nom as destination_nom, p.nom as destination_pays, " +
                 "g.nom as guide_nom " +
                 "FROM reservations r " +
                 "LEFT JOIN utilisateurs u ON r.utilisateur_id = u.id " +
                 "LEFT JOIN destinations d ON r.destination_id = d.id " +
+                "LEFT JOIN pays p ON d.pays_id = p.id " +
                 "LEFT JOIN guides g ON r.guide_id = g.id " +
                 "ORDER BY r.date_reservation DESC";
 
@@ -230,14 +231,17 @@ public class ReservationDAO {
      * Récupérer les réservations d'un utilisateur
      */
     public List<Reservation> findByUtilisateur(int utilisateurId) {
+        System.out.println("🔍 DEBUG: Recherche réservations pour utilisateur ID = " + utilisateurId);
+
         List<Reservation> reservations = new ArrayList<>();
         String sql = "SELECT r.*, " +
                 "u.nom as client_nom, u.prenom as client_prenom, u.email as client_email, " +
-                "d.nom as destination_nom, d.pays as destination_pays, " +
+                "d.nom as destination_nom, p.nom as destination_pays, " +
                 "g.nom as guide_nom " +
                 "FROM reservations r " +
                 "LEFT JOIN utilisateurs u ON r.utilisateur_id = u.id " +
                 "LEFT JOIN destinations d ON r.destination_id = d.id " +
+                "LEFT JOIN pays p ON d.pays_id = p.id " +
                 "LEFT JOIN guides g ON r.guide_id = g.id " +
                 "WHERE r.utilisateur_id = ? " +
                 "ORDER BY r.date_reservation DESC";
@@ -270,8 +274,14 @@ public class ReservationDAO {
                 reservation.setGuideNom(rs.getString("guide_nom"));
 
                 reservations.add(reservation);
+
+                System.out.println("   ✅ Réservation trouvée: " + reservation.getNumeroReservation());
             }
+
+            System.out.println("📊 TOTAL réservations trouvées: " + reservations.size());
+
         } catch (SQLException e) {
+            System.err.println("❌ ERREUR SQL: " + e.getMessage());
             e.printStackTrace();
         }
 

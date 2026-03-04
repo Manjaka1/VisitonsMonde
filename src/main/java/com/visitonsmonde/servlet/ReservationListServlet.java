@@ -1,6 +1,5 @@
 package com.visitonsmonde.servlet;
 
-
 import com.visitonsmonde.dao.ReservationDAO;
 import com.visitonsmonde.model.Reservation;
 import com.visitonsmonde.model.Utilisateur;
@@ -83,15 +82,26 @@ public class ReservationListServlet extends HttpServlet {
         Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateur");
         int utilisateurId = utilisateur.getId();
 
+        // ✅✅✅ LOGS DE DEBUG - DÉBUT ✅✅✅
+        System.out.println("==========================================");
+        System.out.println("🔍 DEBUG SERVLET MES-RESERVATIONS");
+        System.out.println("   Email: " + utilisateur.getEmail());
+        System.out.println("   Nom: " + utilisateur.getNom() + " " + utilisateur.getPrenom());
+        System.out.println("   ID: " + utilisateurId);
+        System.out.println("==========================================");
+        // ✅✅✅ LOGS DE DEBUG - FIN ✅✅✅
+
         String statutFiltre = request.getParameter("statut");
         List<Reservation> reservations;
 
         if (statutFiltre != null && !statutFiltre.trim().isEmpty()) {
-            // Utilisez la nouvelle méthode du DAO
             reservations = reservationDAO.findByUtilisateurAndStatut(utilisateurId, statutFiltre);
         } else {
             reservations = reservationDAO.findByUtilisateur(utilisateurId);
         }
+
+        // ✅ LOG RÉSULTAT
+        System.out.println("📊 RÉSULTAT: " + (reservations != null ? reservations.size() : 0) + " réservations trouvées");
 
         request.setAttribute("reservations", reservations);
         request.getRequestDispatcher("/mes-reservations.jsp").forward(request, response);
@@ -111,18 +121,14 @@ public class ReservationListServlet extends HttpServlet {
         List<Reservation> reservations;
 
         if (numeroFiltre != null && !numeroFiltre.trim().isEmpty()) {
-            // Recherche par numéro spécifique
             Reservation reservation = reservationDAO.findByNumero(numeroFiltre);
             reservations = reservation != null ? List.of(reservation) : List.of();
         } else if (statutFiltre != null && !statutFiltre.trim().isEmpty()) {
-            // Filtrer par statut
             reservations = reservationDAO.findByStatut(statutFiltre);
         } else {
-            // Toutes les réservations
             reservations = reservationDAO.findAll();
         }
 
-        // Calculer les statistiques
         ReservationStats stats = calculerStatistiques(reservations);
 
         request.setAttribute("reservations", reservations);
@@ -176,7 +182,6 @@ public class ReservationListServlet extends HttpServlet {
         response.getWriter().write(csv.toString());
     }
 
-
     /**
      * Classe interne pour les statistiques
      */
@@ -193,7 +198,6 @@ public class ReservationListServlet extends HttpServlet {
             this.annulees = annulees;
         }
 
-        // Getters
         public int getTotalReservations() { return totalReservations; }
         public int getEnAttente() { return enAttente; }
         public int getConfirmees() { return confirmees; }
