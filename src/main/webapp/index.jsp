@@ -1,7 +1,21 @@
 <%@ page import="com.visitonsmonde.model.Utilisateur" %>
+<%@ page import="com.visitonsmonde.model.Destination" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     Utilisateur utilisateurConnecte = (Utilisateur) session.getAttribute("utilisateur");
+
+    // Récupérer les données dynamiques
+    List<Destination> destinationsPopulaires = (List<Destination>) request.getAttribute("destinationsPopulaires");
+    Integer totalDestinations = (Integer) request.getAttribute("totalDestinations");
+    Integer totalClients = (Integer) request.getAttribute("totalClients");
+    Integer totalReservations = (Integer) request.getAttribute("totalReservations");
+
+    // Valeurs par défaut si null
+    if (destinationsPopulaires == null) destinationsPopulaires = new java.util.ArrayList<>();
+    if (totalDestinations == null) totalDestinations = 0;
+    if (totalClients == null) totalClients = 0;
+    if (totalReservations == null) totalReservations = 0;
 %>
 <!DOCTYPE html>
 <html lang="fr">
@@ -28,6 +42,34 @@
 
     <!-- Template Stylesheet -->
     <link href="${pageContext.request.contextPath}/css/style.css" rel="stylesheet">
+    <style>
+        .destination-img {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .destination-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 70%, transparent 100%);
+            padding: 30px !important;
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+
+        .destination-img:hover .destination-overlay {
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.6) 70%, rgba(0,0,0,0.3) 100%);
+        }
+
+        .search-icon {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            z-index: 10;
+        }
+    </style>
 </head>
 
 <body>
@@ -117,6 +159,7 @@
                 <h1 class="mb-4">Bienvenue chez <span class="text-primary">VisitonsMonde</span></h1>
                 <p class="mb-4">Depuis notre création, VisitonsMonde s'est imposée comme référence dans l'organisation de voyages sur mesure. Notre mission est simple : transformer vos rêves d'évasion en expériences inoubliables.</p>
                 <p class="mb-4">Avec une équipe de passionnés et un réseau de guides locaux experts, nous vous garantissons des voyages authentiques, sûrs et mémorables aux quatre coins du monde.</p>
+
                 <div class="row gy-2 gx-4 mb-4">
                     <div class="col-sm-6">
                         <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>Vols Premium</p>
@@ -131,10 +174,10 @@
                         <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>Véhicules Récents</p>
                     </div>
                     <div class="col-sm-6">
-                        <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>150+ Voyages Premium</p>
+                        <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i><%= totalDestinations %>+ Destinations</p>
                     </div>
                     <div class="col-sm-6">
-                        <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>Service 24/7</p>
+                        <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i><%= totalClients %>+ Clients Satisfaits</p>
                     </div>
                 </div>
                 <a class="btn btn-primary rounded-pill py-3 px-5 mt-2" href="${pageContext.request.contextPath}/about.jsp">En savoir plus</a>
@@ -258,54 +301,129 @@
 </div>
 <!-- Services End -->
 
-<!-- Destination Start -->
+<!-- DESTINATIONS POPULAIRES -->
 <div class="container-fluid destination py-5">
     <div class="container py-5">
         <div class="mx-auto text-center mb-5" style="max-width: 900px;">
             <h5 class="section-title px-3">Destinations</h5>
             <h1 class="mb-0">Destinations Populaires</h1>
+            <p class="mt-3">Découvrez nos <%= totalDestinations %> destinations à travers le monde</p>
         </div>
-        <div class="row g-4">
-            <div class="col-xl-8">
-                <div class="row g-4">
-                    <div class="col-lg-6">
-                        <div class="destination-img">
-                            <img class="img-fluid rounded w-100" src="${pageContext.request.contextPath}/img/destination-1.jpg" alt="">
-                            <div class="destination-overlay p-4">
-                                <h4 class="text-white mb-2 mt-3">New York</h4>
-                                <a href="${pageContext.request.contextPath}/destinations" class="btn-hover text-white">Voir Toutes les Destinations <i class="fa fa-arrow-right ms-2"></i></a>
-                            </div>
-                            <div class="search-icon">
-                                <a href="${pageContext.request.contextPath}/img/destination-1.jpg" data-lightbox="destination-1"><i class="fa fa-plus-square fa-1x btn btn-light btn-lg-square text-primary"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="destination-img">
-                            <img class="img-fluid rounded w-100" src="${pageContext.request.contextPath}/img/destination-2.jpg" alt="">
-                            <div class="destination-overlay p-4">
-                                <h4 class="text-white mb-2 mt-3">Las Vegas</h4>
-                                <a href="${pageContext.request.contextPath}/destinations" class="btn-hover text-white">Voir Toutes les Destinations <i class="fa fa-arrow-right ms-2"></i></a>
-                            </div>
-                            <div class="search-icon">
-                                <a href="${pageContext.request.contextPath}/img/destination-2.jpg" data-lightbox="destination-2"><i class="fa fa-plus-square fa-1x btn btn-light btn-lg-square text-primary"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-4">
-                <div class="destination-img h-100">
-                    <img class="img-fluid rounded w-100 h-100" src="${pageContext.request.contextPath}/img/destination-9.jpg" style="object-fit: cover; min-height: 300px;" alt="">
+
+        <% if (destinationsPopulaires != null && !destinationsPopulaires.isEmpty()) { %>
+
+        <!-- 2 premières destinations -->
+        <div class="row g-3">
+            <% for (int i = 0; i < Math.min(2, destinationsPopulaires.size()); i++) {
+                Destination dest = destinationsPopulaires.get(i); %>
+            <div class="col-lg-6">
+                <div class="destination-img">
+                    <img class="img-fluid rounded w-100"
+                         src="${pageContext.request.contextPath}/img/<%= dest.getImage() != null ? dest.getImage() : "default-destination.jpg" %>"
+                         alt="<%= dest.getNom() %>"
+                         onerror="this.src='${pageContext.request.contextPath}/img/default-destination.jpg'">
                     <div class="destination-overlay p-4">
-                        <h4 class="text-white mb-2 mt-3">San Francisco</h4>
-                        <a href="${pageContext.request.contextPath}/destinations" class="btn-hover text-white">Voir Toutes les Destinations <i class="fa fa-arrow-right ms-2"></i></a>
+                        <h4 class="text-white mb-2 mt-3"><%= dest.getNom() %></h4>
+                        <% if (dest.getPays() != null) { %>
+                        <p class="text-white mb-3"><i class="fa fa-map-marker-alt me-2"></i><%= dest.getPays() %></p>
+                        <% } %>
+                        <% if (dest.getPrix() != null) { %>
+                        <p class="text-white mb-3">À partir de <%= String.format("%.0f", dest.getPrix()) %> €</p>
+                        <% } %>
+                        <a href="${pageContext.request.contextPath}/destination-details?id=<%= dest.getId() %>"
+                           class="btn-hover text-white">
+                            Voir les détails <i class="fa fa-arrow-right ms-2"></i>
+                        </a>
                     </div>
                     <div class="search-icon">
-                        <a href="${pageContext.request.contextPath}/img/destination-9.jpg" data-lightbox="destination-9"><i class="fa fa-plus-square fa-1x btn btn-light btn-lg-square text-primary"></i></a>
+                        <a href="${pageContext.request.contextPath}/img/<%= dest.getImage() %>" data-lightbox="destination-<%= dest.getId() %>">
+                            <i class="fa fa-plus-square fa-1x btn btn-light btn-lg-square text-primary"></i>
+                        </a>
                     </div>
                 </div>
             </div>
+            <% } %>
+        </div>
+
+        <!-- 3ème destination pleine largeur -->
+        <% if (destinationsPopulaires.size() > 2) {
+            Destination dest = destinationsPopulaires.get(2); %>
+        <div class="row g-3">
+            <div class="col-12">
+                <div class="destination-img h-100">
+                    <img class="img-fluid rounded w-100 h-100"
+                         src="${pageContext.request.contextPath}/img/<%= dest.getImage() != null ? dest.getImage() : "default-destination.jpg" %>"
+                         alt="<%= dest.getNom() %>"
+                         onerror="this.src='${pageContext.request.contextPath}/img/default-destination.jpg'"
+                         style="object-fit: cover; min-height: 400px;">
+                    <div class="destination-overlay p-4">
+                        <h4 class="text-white mb-2 mt-3"><%= dest.getNom() %></h4>
+                        <% if (dest.getPays() != null) { %>
+                        <p class="text-white mb-3"><i class="fa fa-map-marker-alt me-2"></i><%= dest.getPays() %></p>
+                        <% } %>
+                        <% if (dest.getPrix() != null) { %>
+                        <p class="text-white mb-3">À partir de <%= String.format("%.0f", dest.getPrix()) %> €</p>
+                        <% } %>
+                        <a href="${pageContext.request.contextPath}/destination-details?id=<%= dest.getId() %>"
+                           class="btn-hover text-white">
+                            Voir les détails <i class="fa fa-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+                    <div class="search-icon">
+                        <a href="${pageContext.request.contextPath}/img/<%= dest.getImage() %>" data-lightbox="destination-<%= dest.getId() %>">
+                            <i class="fa fa-plus-square fa-1x btn btn-light btn-lg-square text-primary"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% } %>
+
+        <!-- 3 dernières destinations -->
+        <% if (destinationsPopulaires.size() > 3) { %>
+        <div class="row g-3 mt-3">
+            <% for (int i = 3; i < Math.min(6, destinationsPopulaires.size()); i++) {
+                Destination dest = destinationsPopulaires.get(i); %>
+            <div class="col-lg-4">
+                <div class="destination-img">
+                    <img class="img-fluid rounded w-100"
+                         src="${pageContext.request.contextPath}/img/<%= dest.getImage() != null ? dest.getImage() : "default-destination.jpg" %>"
+                         alt="<%= dest.getNom() %>"
+                         onerror="this.src='${pageContext.request.contextPath}/img/default-destination.jpg'">
+                    <div class="destination-overlay p-4">
+                        <h4 class="text-white mb-2 mt-3"><%= dest.getNom() %></h4>
+                        <% if (dest.getPays() != null) { %>
+                        <p class="text-white mb-3"><i class="fa fa-map-marker-alt me-2"></i><%= dest.getPays() %></p>
+                        <% } %>
+                        <% if (dest.getPrix() != null) { %>
+                        <p class="text-white mb-3">À partir de <%= String.format("%.0f", dest.getPrix()) %> €</p>
+                        <% } %>
+                        <a href="${pageContext.request.contextPath}/destination-details?id=<%= dest.getId() %>"
+                           class="btn-hover text-white">
+                            Voir les détails <i class="fa fa-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+                    <div class="search-icon">
+                        <a href="${pageContext.request.contextPath}/img/<%= dest.getImage() %>" data-lightbox="destination-<%= dest.getId() %>">
+                            <i class="fa fa-plus-square fa-1x btn btn-light btn-lg-square text-primary"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+        </div>
+        <% } %>
+
+        <% } else { %>
+        <div class="alert alert-info text-center">
+            <p>Aucune destination disponible pour le moment.</p>
+        </div>
+        <% } %>
+
+        <div class="text-center mt-5">
+            <a class="btn btn-primary rounded-pill py-3 px-5" href="${pageContext.request.contextPath}/destinations">
+                Voir Toutes Les Destinations
+            </a>
         </div>
     </div>
 </div>

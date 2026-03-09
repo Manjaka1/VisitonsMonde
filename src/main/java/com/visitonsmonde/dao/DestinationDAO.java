@@ -393,4 +393,52 @@ public class DestinationDAO {
             e.printStackTrace();
         }
     }
+    /**
+     * Compter le nombre total de destinations
+     */
+    public int count() throws SQLException {
+        String sql = "SELECT COUNT(*) FROM destinations";
+
+        try (Connection conn = DAOFactory.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * Récupérer les top destinations (les plus récentes ou populaires)
+     */
+    public List<Destination> getTopDestinations(int limit) throws SQLException {
+        List<Destination> destinations = new ArrayList<>();
+        String sql = "SELECT d.*, p.nom as pays_nom " +
+                "FROM destinations d " +
+                "LEFT JOIN pays p ON d.pays_id = p.id " +
+                "ORDER BY d.date_creation DESC " +
+                "LIMIT ?";
+
+        try (Connection conn = DAOFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, limit);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Destination dest = new Destination();
+                dest.setId(rs.getInt("id"));
+                dest.setNom(rs.getString("nom"));
+                dest.setDescription(rs.getString("description"));
+                dest.setImage(rs.getString("image"));
+                dest.setPrix(rs.getBigDecimal("prix"));
+                dest.setPays(rs.getString("pays_nom"));
+                destinations.add(dest);
+            }
+        }
+
+        return destinations;
+    }
 }

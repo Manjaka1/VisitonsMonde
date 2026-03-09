@@ -430,4 +430,22 @@ public class UtilisateurDAO {
         System.out.println("║    TOUS LES TESTS SONT TERMINÉS !       ║");
         System.out.println("╚══════════════════════════════════════════╝");
     }
+    /**
+     * Compter le nombre d'utilisateurs par rôle
+     */
+    public int countByRole(String role) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM utilisateurs WHERE role = ?";
+
+        try (Connection conn = DAOFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, role);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+        return 0;
+    }
 }
