@@ -84,7 +84,7 @@
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">Filtrer mes réservations</h5>
-            <form method="get" action="mes-reservations">
+            <form id="filterForm" onsubmit="event.preventDefault();">
               <div class="row g-2">
                 <div class="col-md-6">
                   <select name="statut" class="form-select">
@@ -413,6 +413,97 @@
       form.appendChild(numeroInput);
       document.body.appendChild(form);
       form.submit();
+    }
+  }
+</script>
+<script>
+  // ========================================
+  // FILTRE DYNAMIQUE DES RÉSERVATIONS
+  // ========================================
+  document.addEventListener('DOMContentLoaded', function() {
+    const selectStatut = document.querySelector('select[name="statut"]');
+
+    if (selectStatut) {
+      selectStatut.addEventListener('change', function() {
+        filtrerReservations();
+      });
+    }
+
+    // Afficher toutes les réservations au chargement
+    afficherToutesReservations();
+  });
+
+  function afficherToutesReservations() {
+    const cards = document.querySelectorAll('.col-lg-6.mb-4');
+    let total = 0;
+
+    cards.forEach(card => {
+      card.style.display = 'block';
+      total++;
+    });
+
+    // Mettre à jour le compteur
+    const compteurElement = document.querySelector('.card.bg-success .display-6');
+    if (compteurElement) {
+      compteurElement.textContent = total;
+    }
+  }
+
+  function filtrerReservations() {
+    const selectStatut = document.querySelector('select[name="statut"]');
+    const statutFiltre = selectStatut.value;
+    const allCards = document.querySelectorAll('.row > .col-lg-6.mb-4');
+
+    console.log('📊 Filtre sélectionné:', statutFiltre);
+    console.log('📋 Nombre total de cartes:', allCards.length);
+
+    let visibleCount = 0;
+
+    allCards.forEach((card, index) => {
+      // Si aucun filtre, tout afficher
+      if (!statutFiltre || statutFiltre === '') {
+        card.style.display = 'block';
+        visibleCount++;
+        return;
+      }
+
+      // Récupérer le badge de statut
+      const statusBadge = card.querySelector('.status-badge');
+
+      if (!statusBadge) {
+        console.warn('⚠️ Pas de badge trouvé pour la carte', index);
+        return;
+      }
+
+      // Extraire le statut depuis la classe CSS
+      const classes = statusBadge.className;
+      let cardStatut = '';
+
+      if (classes.includes('status-en_attente')) {
+        cardStatut = 'en_attente';
+      } else if (classes.includes('status-confirmee')) {
+        cardStatut = 'confirmee';
+      } else if (classes.includes('status-annulee')) {
+        cardStatut = 'annulee';
+      }
+
+      console.log('🏷️ Carte', index, '- Statut:', cardStatut, '- Filtre:', statutFiltre);
+
+      // Afficher ou cacher selon le filtre
+      if (cardStatut === statutFiltre) {
+        card.style.display = 'block';
+        visibleCount++;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    console.log('✅ Réservations affichées:', visibleCount);
+
+    // Mettre à jour le compteur
+    const compteurElement = document.querySelector('.card.bg-success .display-6');
+    if (compteurElement) {
+      compteurElement.textContent = visibleCount;
     }
   }
 </script>

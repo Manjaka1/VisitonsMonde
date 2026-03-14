@@ -69,6 +69,14 @@
             right: 15px;
             z-index: 10;
         }
+
+        .testimonial-item {
+            transition: all 0.3s;
+        }
+        .testimonial-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15) !important;
+        }
     </style>
 </head>
 
@@ -525,7 +533,245 @@
     </div>
 </div>
 <!-- Travel Guide End -->
+<!-- Testimonials Start -->
+<div class="container-fluid testimonial py-5">
+    <div class="container py-5">
+        <div class="mx-auto text-center mb-5" style="max-width: 900px;">
+            <h5 class="section-title px-3">Témoignages</h5>
+            <h1 class="mb-0">Ils Ont Voyagé Avec Nous</h1>
+            <p class="mt-3">Découvrez les expériences de nos clients satisfaits</p>
+        </div>
 
+        <div class="row g-4">
+            <!-- Témoignage 1 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="testimonial-item bg-white rounded p-4 h-100 shadow-sm">
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="${pageContext.request.contextPath}/img/testimonial-1.jpg"
+                             class="rounded-circle me-3"
+                             style="width: 60px; height: 60px; object-fit: cover;"
+                             onerror="this.src='${pageContext.request.contextPath}/img/default-avatar.jpg'">
+                        <div>
+                            <h5 class="mb-0">Sophie Martin</h5>
+                            <small class="text-muted">Paris, France</small>
+                        </div>
+                    </div>
+                    <div class="text-warning mb-2">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="mb-3">
+                        <i class="fas fa-quote-left text-primary me-2"></i>
+                        Un voyage absolument magnifique à Madagascar ! L'organisation était parfaite,
+                        notre guide Rakoto était exceptionnel. Les paysages de l'allée des baobabs
+                        nous ont laissés sans voix. Merci VisitonsMonde !
+                    </p>
+                    <div class="text-muted small">
+                        <i class="fas fa-map-marker-alt me-1"></i>
+                        Voyage à Madagascar - Octobre 2025
+                    </div>
+                </div>
+            </div>
+
+            <!-- Témoignage 2 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="testimonial-item bg-white rounded p-4 h-100 shadow-sm">
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="${pageContext.request.contextPath}/img/testimonial-2.jpg"
+                             class="rounded-circle me-3"
+                             style="width: 60px; height: 60px; object-fit: cover;"
+                             onerror="this.src='${pageContext.request.contextPath}/img/default-avatar.jpg'">
+                        <div>
+                            <h5 class="mb-0">Marc Dubois</h5>
+                            <small class="text-muted">Lyon, France</small>
+                        </div>
+                    </div>
+                    <div class="text-warning mb-2">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="mb-3">
+                        <i class="fas fa-quote-left text-primary me-2"></i>
+                        Safari au Kenya inoubliable ! Nous avons vu les Big Five, l'équipe était
+                        professionnelle et aux petits soins. L'hébergement était top et les repas
+                        délicieux. Une expérience à vivre absolument !
+                    </p>
+                    <div class="text-muted small">
+                        <i class="fas fa-map-marker-alt me-1"></i>
+                        Safari au Kenya - Septembre 2025
+                    </div>
+                </div>
+            </div>
+
+            <!-- Témoignage 3 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="testimonial-item bg-white rounded p-4 h-100 shadow-sm">
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="${pageContext.request.contextPath}/img/testimonial-3.jpg"
+                             class="rounded-circle me-3"
+                             style="width: 60px; height: 60px; object-fit: cover;"
+                             onerror="this.src='${pageContext.request.contextPath}/img/default-avatar.jpg'">
+                        <div>
+                            <h5 class="mb-0">Julie & Thomas</h5>
+                            <small class="text-muted">Marseille, France</small>
+                        </div>
+                    </div>
+                    <div class="text-warning mb-2">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="mb-3">
+                        <i class="fas fa-quote-left text-primary me-2"></i>
+                        Notre lune de miel aux Seychelles était un rêve devenu réalité !
+                        Tout était parfaitement organisé, de l'accueil à l'aéroport aux activités.
+                        Le personnel était adorable. Nous recommandons à 200% !
+                    </p>
+                    <div class="text-muted small">
+                        <i class="fas fa-map-marker-alt me-1"></i>
+                        Lune de miel aux Seychelles - Août 2025
+                    </div>
+                </div>
+            </div>
+
+            <!-- Témoignage 4 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="testimonial-item bg-white rounded p-4 h-100 shadow-sm">
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="${pageContext.request.contextPath}/img/testimonial-4.jpg"
+                             class="rounded-circle me-3"
+                             style="width: 60px; height: 60px; object-fit: cover;"
+                             onerror="this.src='${pageContext.request.contextPath}/img/default-avatar.jpg'">
+                        <div>
+                            <h5 class="mb-0">Pierre Leroux</h5>
+                            <small class="text-muted">Toulouse, France</small>
+                        </div>
+                    </div>
+                    <div class="text-warning mb-2">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="far fa-star"></i>
+                    </div>
+                    <p class="mb-3">
+                        <i class="fas fa-quote-left text-primary me-2"></i>
+                        Excellent voyage en Thaïlande ! Les plages étaient paradisiaques,
+                        la nourriture délicieuse. Une petite amélioration sur la ponctualité
+                        serait appréciée, mais globalement très satisfait !
+                    </p>
+                    <div class="text-muted small">
+                        <i class="fas fa-map-marker-alt me-1"></i>
+                        Circuit en Thaïlande - Juillet 2025
+                    </div>
+                </div>
+            </div>
+
+            <!-- Témoignage 5 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="testimonial-item bg-white rounded p-4 h-100 shadow-sm">
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="${pageContext.request.contextPath}/img/testimonial-5.jpg"
+                             class="rounded-circle me-3"
+                             style="width: 60px; height: 60px; object-fit: cover;"
+                             onerror="this.src='${pageContext.request.contextPath}/img/default-avatar.jpg'">
+                        <div>
+                            <h5 class="mb-0">Famille Rousseau</h5>
+                            <small class="text-muted">Nantes, France</small>
+                        </div>
+                    </div>
+                    <div class="text-warning mb-2">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="mb-3">
+                        <i class="fas fa-quote-left text-primary me-2"></i>
+                        Voyage en famille à l'île Maurice réussi ! Les enfants ont adoré les
+                        activités nautiques. L'hôtel était adapté aux familles et le personnel
+                        très attentionné. Merci pour ces souvenirs inoubliables !
+                    </p>
+                    <div class="text-muted small">
+                        <i class="fas fa-map-marker-alt me-1"></i>
+                        Vacances à l'île Maurice - Décembre 2025
+                    </div>
+                </div>
+            </div>
+
+            <!-- Témoignage 6 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="testimonial-item bg-white rounded p-4 h-100 shadow-sm">
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="${pageContext.request.contextPath}/img/testimonial-6.jpg"
+                             class="rounded-circle me-3"
+                             style="width: 60px; height: 60px; object-fit: cover;"
+                             onerror="this.src='${pageContext.request.contextPath}/img/default-avatar.jpg'">
+                        <div>
+                            <h5 class="mb-0">Claire Benoit</h5>
+                            <small class="text-muted">Bordeaux, France</small>
+                        </div>
+                    </div>
+                    <div class="text-warning mb-2">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="mb-3">
+                        <i class="fas fa-quote-left text-primary me-2"></i>
+                        Road trip en Afrique du Sud fantastique ! De Cape Town au parc Kruger,
+                        chaque étape était magique. Guide très compétent et itinéraire bien pensé.
+                        Je recommande vivement VisitonsMonde !
+                    </p>
+                    <div class="text-muted small">
+                        <i class="fas fa-map-marker-alt me-1"></i>
+                        Road Trip Afrique du Sud - Novembre 2025
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistiques -->
+        <div class="row mt-5">
+            <div class="col-md-3 col-6 text-center mb-3">
+                <div class="bg-light rounded p-4">
+                    <h2 class="text-primary mb-0"><%= totalClients != null ? totalClients : 5 %>+</h2>
+                    <p class="mb-0">Clients Satisfaits</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 text-center mb-3">
+                <div class="bg-light rounded p-4">
+                    <h2 class="text-primary mb-0">4.9/5</h2>
+                    <p class="mb-0">Note Moyenne</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 text-center mb-3">
+                <div class="bg-light rounded p-4">
+                    <h2 class="text-primary mb-0">98%</h2>
+                    <p class="mb-0">Taux de Satisfaction</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 text-center mb-3">
+                <div class="bg-light rounded p-4">
+                    <h2 class="text-primary mb-0"><%= totalDestinations != null ? totalDestinations : 25 %>+</h2>
+                    <p class="mb-0">Destinations</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Testimonials End -->
 <!-- Subscribe Start -->
 <div class="container-fluid subscribe py-5">
     <div class="container text-center py-5">

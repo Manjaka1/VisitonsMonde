@@ -1,15 +1,28 @@
 <%@ page import="com.visitonsmonde.model.Utilisateur" %>
+<%@ page import="com.visitonsmonde.model.Blog" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.text.SimpleDateFormat" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+<%
+    List<Blog> blogs = (List<Blog>) request.getAttribute("blogs");
+    Integer totalBlogs = (Integer) request.getAttribute("totalBlogs");
+
+    if (blogs == null) blogs = new java.util.ArrayList<>();
+    if (totalBlogs == null) totalBlogs = 0;
+
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
+%>
 
 <!DOCTYPE html>
 <html lang="fr">
 
 <head>
     <meta charset="utf-8">
-    <title>Blog Voyage - TripHive</title>
+    <title>Blog Voyage - VisitonsMonde</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="blog voyage, conseils voyage, destinations" name="keywords">
-    <meta content="Découvrez nos conseils d'experts et inspirations voyage sur le blog TripHive" name="description">
+    <meta content="Découvrez nos conseils d'experts et inspirations voyage sur le blog VisitonsMonde" name="description">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,14 +34,14 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
     <!-- Libraries Stylesheet -->
-    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-    <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/lib/lightbox/css/lightbox.min.css" rel="stylesheet">
 
     <!-- Customized Bootstrap Stylesheet -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Template Stylesheet -->
-    <link href="css/style.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/style.css" rel="stylesheet">
 </head>
 
 <body>
@@ -42,15 +55,14 @@
 <!-- Spinner End -->
 
 <!-- Navbar -->
-<%@ include file="navbar.jsp" %>
+<jsp:include page="navbar.jsp" />
 
 <!-- Header Start -->
 <div class="container-fluid bg-breadcrumb">
     <div class="container text-center py-5" style="max-width: 900px;">
         <h1 class="text-white display-3 mb-4">Blog Voyage</h1>
         <ol class="breadcrumb justify-content-center mb-0">
-            <li class="breadcrumb-item"><a href="index.jsp">Accueil</a></li>
-            <li class="breadcrumb-item"><a href="#">Pages</a></li>
+            <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/index.jsp">Accueil</a></li>
             <li class="breadcrumb-item active text-white">Blog</li>
         </ol>
     </div>
@@ -65,168 +77,65 @@
             <h1 class="mb-4">Conseils & Inspirations Voyage</h1>
             <p class="mb-0">Nos experts partagent leurs secrets et découvertes pour vous aider à vivre des aventures extraordinaires. Guides pratiques, destinations secrètes et conseils d'initiés vous attendent.
             </p>
+            <p class="mt-3 text-primary fw-bold"><%= totalBlogs %> articles disponibles</p>
         </div>
+
+        <% if (blogs != null && !blogs.isEmpty()) { %>
         <div class="row g-4 justify-content-center">
+            <% for (Blog blog : blogs) { %>
             <div class="col-lg-4 col-md-6">
                 <div class="blog-item">
                     <div class="blog-img">
                         <div class="blog-img-inner">
-                            <img class="img-fluid w-100 rounded-top" src="img/blog-1.jpg" alt="Madagascar secret">
+                            <img class="img-fluid w-100 rounded-top"
+                                 src="${pageContext.request.contextPath}/<%= blog.getImage() != null ? blog.getImage() : "img/blog-default.jpg" %>"
+                                 alt="<%= blog.getTitre() %>"
+                                 onerror="this.src='${pageContext.request.contextPath}/img/blog-default.jpg'"
+                                 style="height: 250px; object-fit: cover;">
                             <div class="blog-icon">
-                                <a href="#" class="my-auto"><i class="fas fa-link fa-2x text-white"></i></a>
+                                <a href="blog-details?id=<%= blog.getId() %>" class="my-auto">
+                                    <i class="fas fa-link fa-2x text-white"></i>
+                                </a>
                             </div>
                         </div>
                         <div class="blog-info d-flex align-items-center border border-start-0 border-end-0">
-                            <small class="flex-fill text-center border-end py-2"><i class="fa fa-calendar-alt text-primary me-2"></i>15 Déc 2024</small>
-                            <a href="#" class="btn-hover flex-fill text-center text-white border-end py-2"><i class="fa fa-thumbs-up text-primary me-2"></i>2.1K</a>
-                            <a href="#" class="btn-hover flex-fill text-center text-white py-2"><i class="fa fa-comments text-primary me-2"></i>156</a>
+                            <small class="flex-fill text-center border-end py-2">
+                                <i class="fa fa-calendar-alt text-primary me-2"></i>
+                                <%= blog.getDatePublication() != null ? dateFormat.format(blog.getDatePublication()) : "N/A" %>
+                            </small>
+                            <a href="#" class="btn-hover flex-fill text-center text-white border-end py-2">
+                                <i class="fa fa-thumbs-up text-primary me-2"></i>
+                                <%= String.format("%.1fK", blog.getLikes() / 1000.0) %>
+                            </a>
+                            <a href="#" class="btn-hover flex-fill text-center text-white py-2">
+                                <i class="fa fa-comments text-primary me-2"></i>
+                                <%= blog.getCommentaires() %>
+                            </a>
                         </div>
                     </div>
                     <div class="blog-content border border-top-0 rounded-bottom p-4">
-                        <p class="mb-3">Par: <strong>Marie Leroy</strong></p>
-                        <a href="#" class="h4">Madagascar Secret : 10 Lieux Hors des Sentiers Battus</a>
-                        <p class="my-3">Découvrez les trésors cachés de la Grande Île : des plages vierges d'Anakao aux tsingy méconnus de Bemaraha. Notre guide exclusif révèle les spots secrets que seuls les locaux connaissent.</p>
-                        <a href="#" class="btn btn-primary rounded-pill py-2 px-4">Lire Plus</a>
+                        <p class="mb-3">Par: <strong><%= blog.getAuteur() != null ? blog.getAuteur() : "Anonyme" %></strong></p>
+                        <a href="blog-details?id=<%= blog.getId() %>" class="h4"><%= blog.getTitre() %></a>
+                        <p class="my-3"><%= blog.getDescriptionCourte() != null ? blog.getDescriptionCourte() : "" %></p>
+                        <a href="blog-details?id=<%= blog.getId() %>" class="btn btn-primary rounded-pill py-2 px-4">
+                            Lire Plus
+                        </a>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4 col-md-6">
-                <div class="blog-item">
-                    <div class="blog-img">
-                        <div class="blog-img-inner">
-                            <img class="img-fluid w-100 rounded-top" src="img/blog-2.jpg" alt="Tokyo moderne">
-                            <div class="blog-icon">
-                                <a href="#" class="my-auto"><i class="fas fa-link fa-2x text-white"></i></a>
-                            </div>
-                        </div>
-                        <div class="blog-info d-flex align-items-center border border-start-0 border-end-0">
-                            <small class="flex-fill text-center border-end py-2"><i class="fa fa-calendar-alt text-primary me-2"></i>8 Déc 2024</small>
-                            <a href="#" class="btn-hover flex-fill text-center text-white border-end py-2"><i class="fa fa-thumbs-up text-primary me-2"></i>1.8K</a>
-                            <a href="#" class="btn-hover flex-fill text-center text-white py-2"><i class="fa fa-comments text-primary me-2"></i>94</a>
-                        </div>
-                    </div>
-                    <div class="blog-content border border-top-0 rounded-bottom p-4">
-                        <p class="mb-3">Par: <strong>Sophie Martin</strong></p>
-                        <a href="#" class="h4">Tokyo 2025 : Guide du Voyageur Moderne</a>
-                        <p class="my-3">Entre tradition millénaire et innovation futuriste, Tokyo se réinvente sans cesse. Nos 15 adresses incontournables pour une immersion authentique dans la capitale nippone.</p>
-                        <a href="#" class="btn btn-primary rounded-pill py-2 px-4">Lire Plus</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-                <div class="blog-item">
-                    <div class="blog-img">
-                        <div class="blog-img-inner">
-                            <img class="img-fluid w-100 rounded-top" src="img/blog-3.jpg" alt="Voyage écologique">
-                            <div class="blog-icon">
-                                <a href="#" class="my-auto"><i class="fas fa-link fa-2x text-white"></i></a>
-                            </div>
-                        </div>
-                        <div class="blog-info d-flex align-items-center border border-start-0 border-end-0">
-                            <small class="flex-fill text-center border-end py-2"><i class="fa fa-calendar-alt text-primary me-2"></i>1 Déc 2024</small>
-                            <a href="#" class="btn-hover flex-fill text-center text-white border-end py-2"><i class="fa fa-thumbs-up text-primary me-2"></i>3.2K</a>
-                            <a href="#" class="btn-hover flex-fill text-center text-white py-2"><i class="fa fa-comments text-primary me-2"></i>287</a>
-                        </div>
-                    </div>
-                    <div class="blog-content border border-top-0 rounded-bottom p-4">
-                        <p class="mb-3">Par: <strong>Alexandre Dubois</strong></p>
-                        <a href="#" class="h4">Voyage Responsable : L'Écotourisme en 2025</a>
-                        <p class="my-3">Comment voyager tout en préservant notre planète ? Découvrez nos destinations éco-responsables et nos conseils pour réduire votre empreinte carbone sans sacrifier l'aventure.</p>
-                        <a href="#" class="btn btn-primary rounded-pill py-2 px-4">Lire Plus</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-                <div class="blog-item">
-                    <div class="blog-img">
-                        <div class="blog-img-inner">
-                            <img class="img-packages-4.jpg" class="img-fluid w-100 rounded-top" alt="Venise romantique">
-                            <div class="blog-icon">
-                                <a href="#" class="my-auto"><i class="fas fa-link fa-2x text-white"></i></a>
-                            </div>
-                        </div>
-                        <div class="blog-info d-flex align-items-center border border-start-0 border-end-0">
-                            <small class="flex-fill text-center border-end py-2"><i class="fa fa-calendar-alt text-primary me-2"></i>25 Nov 2024</small>
-                            <a href="#" class="btn-hover flex-fill text-center text-white border-end py-2"><i class="fa fa-thumbs-up text-primary me-2"></i>2.7K</a>
-                            <a href="#" class="btn-hover flex-fill text-center text-white py-2"><i class="fa fa-comments text-primary me-2"></i>198</a>
-                        </div>
-                    </div>
-                    <div class="blog-content border border-top-0 rounded-bottom p-4">
-                        <p class="mb-3">Par: <strong>Thomas Bernard</strong></p>
-                        <a href="#" class="h4">Venise Hors Saison : Le Charme de l'Authenticité</a>
-                        <p class="my-3">Évitez les foules et découvrez la vraie Venise. Notre guide des meilleures périodes pour visiter la Sérénissime, avec nos adresses secrètes loin des circuits touristiques.</p>
-                        <a href="#" class="btn btn-primary rounded-pill py-2 px-4">Lire Plus</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-                <div class="blog-item">
-                    <div class="blog-img">
-                        <div class="blog-img-inner">
-                            <img class="img-fluid w-100 rounded-top" src="img/packages-2.jpg" alt="Route 66 USA">
-                            <div class="blog-icon">
-                                <a href="#" class="my-auto"><i class="fas fa-link fa-2x text-white"></i></a>
-                            </div>
-                        </div>
-                        <div class="blog-info d-flex align-items-center border border-start-0 border-end-0">
-                            <small class="flex-fill text-center border-end py-2"><i class="fa fa-calendar-alt text-primary me-2"></i>18 Nov 2024</small>
-                            <a href="#" class="btn-hover flex-fill text-center text-white border-end py-2"><i class="fa fa-thumbs-up text-primary me-2"></i>1.9K</a>
-                            <a href="#" class="btn-hover flex-fill text-center text-white py-2"><i class="fa fa-comments text-primary me-2"></i>142</a>
-                        </div>
-                    </div>
-                    <div class="blog-content border border-top-0 rounded-bottom p-4">
-                        <p class="mb-3">Par: <strong>Sophie Martin</strong></p>
-                        <a href="#" class="h4">Road Trip USA : L'Ouest Américain en 2 Semaines</a>
-                        <p class="my-3">De Los Angeles à San Francisco en passant par Las Vegas et le Grand Canyon : l'itinéraire parfait pour découvrir l'Ouest américain. Budget, étapes et conseils pratiques inclus.</p>
-                        <a href="#" class="btn btn-primary rounded-pill py-2 px-4">Lire Plus</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-                <div class="blog-item">
-                    <div class="blog-img">
-                        <div class="blog-img-inner">
-                            <img class="img-fluid w-100 rounded-top" src="img/packages-1.jpg" alt="Cuisine du monde">
-                            <div class="blog-icon">
-                                <a href="#" class="my-auto"><i class="fas fa-link fa-2x text-white"></i></a>
-                            </div>
-                        </div>
-                        <div class="blog-info d-flex align-items-center border border-start-0 border-end-0">
-                            <small class="flex-fill text-center border-end py-2"><i class="fa fa-calendar-alt text-primary me-2"></i>10 Nov 2024</small>
-                            <a href="#" class="btn-hover flex-fill text-center text-white border-end py-2"><i class="fa fa-thumbs-up text-primary me-2"></i>4.1K</a>
-                            <a href="#" class="btn-hover flex-fill text-center text-white py-2"><i class="fa fa-comments text-primary me-2"></i>356</a>
-                        </div>
-                    </div>
-                    <div class="blog-content border border-top-0 rounded-bottom p-4">
-                        <p class="mb-3">Par: <strong>Marie Leroy</strong></p>
-                        <a href="#" class="h4">Voyager par les Papilles : 10 Destinations Gastronomiques</a>
-                        <p class="my-3">De la street food thaïlandaise aux étoilés parisiens, découvrez les destinations où la cuisine devient l'âme du voyage. Notre sélection de lieux incontournables pour les gourmets.</p>
-                        <a href="#" class="btn btn-primary rounded-pill py-2 px-4">Lire Plus</a>
-                    </div>
+            <% } %>
+        </div>
+        <% } else { %>
+        <div class="row">
+            <div class="col-12">
+                <div class="alert alert-info text-center py-5">
+                    <i class="fas fa-info-circle fa-3x mb-3"></i>
+                    <h4>Aucun article disponible pour le moment</h4>
+                    <p>Revenez bientôt pour découvrir nos derniers articles voyage !</p>
                 </div>
             </div>
         </div>
-        <div class="text-center mt-5">
-            <nav aria-label="Pagination blog">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item disabled">
-                        <span class="page-link">Précédent</span>
-                    </li>
-                    <li class="page-item active">
-                        <span class="page-link">1</span>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">2</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">3</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">Suivant</a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
+        <% } %>
     </div>
 </div>
 <!-- Blog End -->
@@ -248,10 +157,8 @@
 </div>
 <!-- Subscribe End -->
 
-<!-- Footer Start -->
-
+<!-- Footer -->
 <jsp:include page="footer.jsp" />
-<!-- Copyright End -->
 
 <!-- Back to Top -->
 <a href="#" class="btn btn-primary btn-primary-outline-0 btn-md-square back-to-top"><i class="fa fa-arrow-up"></i></a>
@@ -259,13 +166,11 @@
 <!-- JavaScript Libraries -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="lib/easing/easing.min.js"></script>
-<script src="lib/waypoints/waypoints.min.js"></script>
-<script src="lib/owlcarousel/owl.carousel.min.js"></script>
-<script src="lib/lightbox/js/lightbox.min.js"></script>
-
-<!-- Template Javascript -->
-<script src="js/main.js"></script>
+<script src="${pageContext.request.contextPath}/lib/easing/easing.min.js"></script>
+<script src="${pageContext.request.contextPath}/lib/waypoints/waypoints.min.js"></script>
+<script src="${pageContext.request.contextPath}/lib/owlcarousel/owl.carousel.min.js"></script>
+<script src="${pageContext.request.contextPath}/lib/lightbox/js/lightbox.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/main.js"></script>
 </body>
 
 </html>

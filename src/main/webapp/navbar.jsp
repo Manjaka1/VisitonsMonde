@@ -86,7 +86,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto py-0">
-                <a href="${pageContext.request.contextPath}/index.jsp" class="nav-item nav-link">
+                <a href="${pageContext.request.contextPath}/accueil" class="nav-item nav-link">
                     <i class="fas fa-home me-1"></i>Accueil
                 </a>
                 <a href="${pageContext.request.contextPath}/destinations" class="nav-item nav-link">
@@ -106,7 +106,7 @@
                 <a href="${pageContext.request.contextPath}/services.jsp" class="nav-item nav-link">
                     <i class="fas fa-concierge-bell me-1"></i>Services
                 </a>
-                <a href="${pageContext.request.contextPath}/blog.jsp" class="nav-item nav-link">
+                <a href="${pageContext.request.contextPath}/blog" class="nav-item nav-link">
                     <i class="fas fa-blog me-1"></i>Blog
                 </a>
                 <a href="${pageContext.request.contextPath}/about.jsp" class="nav-item nav-link">
