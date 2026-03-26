@@ -141,7 +141,7 @@ public class RegisterServlet extends HttpServlet {
             }
 
         } catch (Exception e) {
-            System.err.println("❌ Erreur inattendue:");
+            System.err.println(" Erreur inattendue:");
             e.printStackTrace();
             request.setAttribute("erreur", "Erreur inattendue. Veuillez réessayer.");
             request.getRequestDispatcher("/index.jsp").forward(request, response);

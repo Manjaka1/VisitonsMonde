@@ -47,23 +47,21 @@ public class LoginServlet extends HttpServlet {
                     System.out.println("🔐 Admin connecté - redirection vers /admin");
                     response.sendRedirect(request.getContextPath() + "/admin");
                 } else {
-                    System.out.println("👤 Utilisateur normal - redirection vers /index.jsp");
-                    response.sendRedirect(request.getContextPath() + "/index.jsp");
+                    System.out.println("👤 Utilisateur normal - redirection vers /accueil");
+                    response.sendRedirect(request.getContextPath() + "/accueil");
                 }
                 return;
             } else {
                 // Échec de connexion
-                System.out.println("❌ Échec de connexion pour: " + email);
-                // ✅ CHANGÉ : "erreur" → "erreurLogin"
-                request.setAttribute("erreurLogin", "Email ou mot de passe incorrect");
-                request.getRequestDispatcher("/index.jsp").forward(request, response);
+                System.out.println(" Échec de connexion pour: " + email);
+                request.setAttribute("erreur", " Email ou mot de passe incorrect. Veuillez réessayer.");
+                request.getRequestDispatcher("/login.jsp").forward(request, response);
             }
         } catch (Exception e) {
-            System.err.println("❌ Erreur de connexion: " + e.getMessage());
+            System.err.println(" Erreur de connexion: " + e.getMessage());
             e.printStackTrace();
-            // ✅ CHANGÉ : "erreur" → "erreurLogin"
-            request.setAttribute("erreurLogin", "Erreur de connexion. Veuillez réessayer.");
-            request.getRequestDispatcher("/index.jsp").forward(request, response);
+            request.setAttribute("erreur", " Erreur de connexion. Veuillez réessayer.");
+            request.getRequestDispatcher("/login.jsp").forward(request, response);
         }
     }
 }

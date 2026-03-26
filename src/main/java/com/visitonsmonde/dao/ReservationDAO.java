@@ -19,7 +19,7 @@ public class ReservationDAO {
         try {
             return DAOFactory.getConnection();
         } catch (SQLException e) {
-            System.err.println("❌ ERREUR CONNEXION BD: " + e.getMessage());
+            System.err.println(" ERREUR CONNEXION BD: " + e.getMessage());
             throw e;
         }
     }

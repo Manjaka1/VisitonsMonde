@@ -32,7 +32,7 @@ public class ReservationServlet extends HttpServlet {  // ✅ PUBLIC !
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        System.out.println("🎯🎯🎯 RESERVATION SERVLET APPELÉ ! 🎯🎯🎯");
+        System.out.println(" RESERVATION SERVLET APPELÉ !");
         System.out.println("Méthode: " + request.getMethod());
         System.out.println("URL: " + request.getRequestURL());
         System.out.println("Action parameter: " + request.getParameter("action"));
@@ -47,10 +47,10 @@ public class ReservationServlet extends HttpServlet {  // ✅ PUBLIC !
         }
 
         if ("creer".equals(request.getParameter("action"))) {
-            System.out.println("🟢 Action 'creer' détectée");
+            System.out.println(" Action 'creer' détectée");
             creerReservation(request, response);
         } else {
-            System.out.println("🔴 Action non reconnue: " + request.getParameter("action"));
+            System.out.println(" Action non reconnue: " + request.getParameter("action"));
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Action non reconnue");
         }
     }
@@ -86,7 +86,7 @@ public class ReservationServlet extends HttpServlet {  // ✅ PUBLIC !
 
             // Validation des paramètres obligatoires
             if (destinationIdStr == null || nbPersonnesStr == null || dateDepartStr == null || prixDestinationStr == null) {
-                System.err.println("❌ Paramètres manquants");
+                System.err.println(" Paramètres manquants");
                 response.sendRedirect("erreur-reservation.jsp");
                 return;
             }
@@ -106,10 +106,10 @@ public class ReservationServlet extends HttpServlet {  // ✅ PUBLIC !
             if (guideIdStr != null && !guideIdStr.trim().isEmpty() && !"".equals(guideIdStr)) {
                 try {
                     reservation.setGuideId(Integer.parseInt(guideIdStr));
-                    System.out.println("✅ Guide sélectionné: " + guideIdStr);
+                    System.out.println(" Guide sélectionné: " + guideIdStr);
                 } catch (NumberFormatException e) {
                     reservation.setGuideId(null);
-                    System.out.println("⚠️ Guide non valide, mis à null");
+                    System.out.println(" Guide non valide, mis à null");
                 }
             } else {
                 reservation.setGuideId(null);
@@ -140,9 +140,9 @@ public class ReservationServlet extends HttpServlet {  // ✅ PUBLIC !
 
             // 4. Redirection avec TOUS les paramètres
             if (success) {
-                System.out.println("✅ Réservation créée avec succès!");
-                System.out.println("🆔 ID: " + reservation.getId());
-                System.out.println("🔢 Numéro: " + reservation.getNumeroReservation());
+                System.out.println(" Réservation créée avec succès!");
+                System.out.println(" ID: " + reservation.getId());
+                System.out.println(" Numéro: " + reservation.getNumeroReservation());
 
                 // REDIRECTION AVEC TOUS LES PARAMÈTRES
                 String redirectUrl = String.format(
@@ -159,16 +159,16 @@ public class ReservationServlet extends HttpServlet {  // ✅ PUBLIC !
                 response.sendRedirect(redirectUrl);
 
             } else {
-                System.err.println("❌ Échec de la création de réservation");
+                System.err.println(" Échec de la création de réservation");
                 response.sendRedirect("erreur-reservation.jsp");
             }
 
         } catch (NumberFormatException e) {
-            System.err.println("❌ Erreur de format des paramètres: " + e.getMessage());
+            System.err.println(" Erreur de format des paramètres: " + e.getMessage());
             e.printStackTrace();
             response.sendRedirect("erreur-reservation.jsp");
         } catch (Exception e) {
-            System.err.println("❌ Erreur lors de la création de réservation: " + e.getMessage());
+            System.err.println(" Erreur lors de la création de réservation: " + e.getMessage());
             e.printStackTrace();
             response.sendRedirect("erreur-reservation.jsp");
         }

@@ -142,10 +142,11 @@
         </a>
       </div>
 
-      <div class="alert alert-info mt-4 mb-0">
-        <i class="fas fa-info-circle me-2"></i>
-        Un email de confirmation a été envoyé à <strong><%= utilisateur != null ? utilisateur.getEmail() : "votre adresse" %></strong>
-      </div>
+      <<div class="alert alert-success mt-4 mb-0">
+      <i class="fas fa-check-circle me-2"></i>
+      <strong>🎉 Félicitations !</strong> Votre réservation a été enregistrée avec succès.<br>
+      Notre équipe va examiner votre demande et vous recevrez une confirmation par email à <strong><%= utilisateur != null ? utilisateur.getEmail() : "votre adresse" %></strong> dans les <strong>24 heures</strong>.
+    </div>
 
       <% } else { %>
       <div class="alert alert-danger">
@@ -159,5 +160,15 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<% if (numero != null) { %>
+<script>
+  window.onload = function() {
+    alert('🎉 FÉLICITATIONS !\n\n' +
+            'Votre réservation N° <%= numero %> a été enregistrée avec succès !\n\n' +
+            'Notre équipe va examiner votre demande.\n' +
+            'Vous recevrez une confirmation par email dans les 24 heures.');
+  };
+</script>
+<% } %>
 </body>
 </html>

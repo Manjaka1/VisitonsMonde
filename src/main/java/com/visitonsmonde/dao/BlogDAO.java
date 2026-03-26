@@ -27,7 +27,7 @@ public class BlogDAO {
             }
 
         } catch (SQLException e) {
-            System.err.println("❌ Erreur lors de la récupération des articles de blog : " + e.getMessage());
+            System.err.println(" Erreur lors de la récupération des articles de blog : " + e.getMessage());
             e.printStackTrace();
         }
 
@@ -52,7 +52,7 @@ public class BlogDAO {
             }
 
         } catch (SQLException e) {
-            System.err.println("❌ Erreur lors de la récupération de l'article " + id + " : " + e.getMessage());
+            System.err.println(" Erreur lors de la récupération de l'article " + id + " : " + e.getMessage());
             e.printStackTrace();
         }
 
@@ -79,7 +79,7 @@ public class BlogDAO {
             }
 
         } catch (SQLException e) {
-            System.err.println("❌ Erreur lors de la récupération des derniers articles : " + e.getMessage());
+            System.err.println(" Erreur lors de la récupération des derniers articles : " + e.getMessage());
             e.printStackTrace();
         }
 
@@ -102,7 +102,7 @@ public class BlogDAO {
             }
 
         } catch (SQLException e) {
-            System.err.println("❌ Erreur lors du comptage des articles : " + e.getMessage());
+            System.err.println(" Erreur lors du comptage des articles : " + e.getMessage());
             e.printStackTrace();
         }
 
@@ -123,7 +123,7 @@ public class BlogDAO {
             return rowsAffected > 0;
 
         } catch (SQLException e) {
-            System.err.println("❌ Erreur lors de l'incrémentation des likes : " + e.getMessage());
+            System.err.println(" Erreur lors de l'incrémentation des likes : " + e.getMessage());
             e.printStackTrace();
             return false;
         }

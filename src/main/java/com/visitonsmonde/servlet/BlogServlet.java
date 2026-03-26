@@ -44,7 +44,7 @@ public class BlogServlet extends HttpServlet {
             request.getRequestDispatcher("/blog.jsp").forward(request, response);
 
         } catch (Exception e) {
-            System.err.println("❌ Erreur dans BlogServlet : " + e.getMessage());
+            System.err.println(" Erreur dans BlogServlet : " + e.getMessage());
             e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                     "Erreur lors du chargement des articles");

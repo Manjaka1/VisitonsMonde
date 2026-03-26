@@ -371,10 +371,10 @@ public class PaysDAO {
                 System.out.println("   • " + continent + ": " + nb + " pays");
             }
 
-            System.out.println("\n✅ Tests réussis - DAO fonctionnel");
+            System.out.println("\n Tests réussis - DAO fonctionnel");
 
         } catch (Exception e) {
-            System.err.println("❌ Erreur durant les tests:");
+            System.err.println(" Erreur durant les tests:");
             System.err.println("   " + e.getMessage());
             e.printStackTrace();
         }
@@ -387,7 +387,7 @@ public class PaysDAO {
             ajouterPays(pays);
             return true;
         } catch (SQLException e) {
-            System.err.println("❌ Erreur create pays: " + e.getMessage());
+            System.err.println(" Erreur create pays: " + e.getMessage());
             return false;
         }
     }
@@ -399,7 +399,7 @@ public class PaysDAO {
         try {
             return getPaysById(id);
         } catch (SQLException e) {
-            System.err.println("❌ Erreur findById pays: " + e.getMessage());
+            System.err.println(" Erreur findById pays: " + e.getMessage());
             return null;
         }
     }
@@ -412,7 +412,7 @@ public class PaysDAO {
             modifierPays(pays);
             return true;
         } catch (SQLException e) {
-            System.err.println("❌ Erreur update pays: " + e.getMessage());
+            System.err.println(" Erreur update pays: " + e.getMessage());
             return false;
         }
     }
@@ -425,7 +425,7 @@ public class PaysDAO {
             supprimerPays(id);
             return true;
         } catch (SQLException e) {
-            System.err.println("❌ Erreur delete pays: " + e.getMessage());
+            System.err.println(" Erreur delete pays: " + e.getMessage());
             return false;
         }
     }

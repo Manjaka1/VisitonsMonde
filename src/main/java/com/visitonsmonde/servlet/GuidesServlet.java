@@ -21,7 +21,7 @@ public class GuidesServlet extends HttpServlet {
     public void init() throws ServletException {
         super.init();
         guideDAO = new GuideDAO();
-        System.out.println("✅ GuidesServlet initialisé");
+        System.out.println(" GuidesServlet initialisé");
     }
 
     @Override
@@ -47,17 +47,17 @@ public class GuidesServlet extends HttpServlet {
                     guidesActifs.add(guide);
                     System.out.println("  ✅ Guide ACTIF ajouté : " + guide.getNomComplet());
                 } else {
-                    System.out.println("  ❌ Guide IGNORÉ (statut: " + guide.getStatut() + ") : " + guide.getNomComplet());
+                    System.out.println("   Guide IGNORÉ (statut: " + guide.getStatut() + ") : " + guide.getNomComplet());
                 }
             }
 
-            System.out.println("📊 Guides actifs trouvés : " + guidesActifs.size() + " / " + tousLesGuides.size());
+            System.out.println(" Guides actifs trouvés : " + guidesActifs.size() + " / " + tousLesGuides.size());
 
             // Passer les guides à la JSP
             request.setAttribute("guides", guidesActifs);
 
         } catch (Exception e) {
-            System.err.println("❌ Erreur récupération guides : " + e.getMessage());
+            System.err.println(" Erreur récupération guides : " + e.getMessage());
             e.printStackTrace();
             request.setAttribute("guides", new ArrayList<>());
             request.setAttribute("erreur", "Erreur lors du chargement des guides.");

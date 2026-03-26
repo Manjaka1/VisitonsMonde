@@ -22,7 +22,7 @@ public class DAOFactory {
             Class.forName(JDBC_DRIVER);
             System.out.println("✅ Driver MySQL chargé avec succès");
         } catch (ClassNotFoundException e) {
-            System.err.println("❌ Erreur chargement driver MySQL : " + e.getMessage());
+            System.err.println(" Erreur chargement driver MySQL : " + e.getMessage());
             throw new RuntimeException("Driver MySQL non trouvé", e);
         }
     }
@@ -39,7 +39,7 @@ public class DAOFactory {
             System.out.println("🔗 Connexion établie à la base de données");
             return connection;
         } catch (SQLException e) {
-            System.err.println("❌ Erreur connexion base de données : " + e.getMessage());
+            System.err.println(" Erreur connexion base de données : " + e.getMessage());
             throw e;
         }
     }
@@ -51,10 +51,10 @@ public class DAOFactory {
      */
     public static boolean testConnection() {
         try (Connection conn = getConnection()) {
-            System.out.println("✅ Test de connexion réussi");
+            System.out.println(" Test de connexion réussi");
             return conn != null && !conn.isClosed();
         } catch (SQLException e) {
-            System.err.println("❌ Test de connexion échoué : " + e.getMessage());
+            System.err.println(" Test de connexion échoué : " + e.getMessage());
             return false;
         }
     }
@@ -70,7 +70,7 @@ public class DAOFactory {
                 connection.close();
                 System.out.println("🔒 Connexion fermée");
             } catch (SQLException e) {
-                System.err.println("⚠️ Erreur fermeture connexion : " + e.getMessage());
+                System.err.println("⚠ Erreur fermeture connexion : " + e.getMessage());
             }
         }
     }
@@ -85,17 +85,17 @@ public class DAOFactory {
         System.out.println("\n📦 Driver chargé automatiquement");
 
         // Test 2: Test de connexion
-        System.out.println("\n🔍 Test de connexion :");
+        System.out.println("\n Test de connexion :");
         boolean connected = testConnection();
 
         if (connected) {
-            System.out.println("✅ DAOFactory prête à être utilisée");
+            System.out.println(" DAOFactory prête à être utilisée");
         } else {
-            System.out.println("❌ Problème de configuration de la base");
+            System.out.println(" Problème de configuration de la base");
         }
 
         // Test 3: Connexion manuelle
-        System.out.println("\n🔗 Test connexion manuelle :");
+        System.out.println("\n Test connexion manuelle :");
         try {
             Connection conn = getConnection();
             System.out.println("   → Connexion obtenue : " + conn.getClass().getSimpleName());
@@ -104,6 +104,6 @@ public class DAOFactory {
             System.err.println("   → Erreur : " + e.getMessage());
         }
 
-        System.out.println("\n✅ Tests terminés !");
+        System.out.println("\n Tests terminés !");
     }
 }

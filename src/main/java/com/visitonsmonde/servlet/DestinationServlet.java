@@ -27,9 +27,9 @@ public class DestinationServlet extends HttpServlet {
         try {
             destinationDAO = new DestinationDAO();
             paysDAO = new PaysDAO();
-            System.out.println("✅ DestinationServlet initialisé avec succès");
+            System.out.println(" DestinationServlet initialisé avec succès");
         } catch (Exception e) {
-            System.err.println("❌ Erreur initialisation DestinationServlet : " + e.getMessage());
+            System.err.println(" Erreur initialisation DestinationServlet : " + e.getMessage());
             throw new ServletException("Impossible d'initialiser le servlet", e);
         }
     }
@@ -38,7 +38,7 @@ public class DestinationServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        System.out.println("🎯 DESTINATION SERVLET APPELÉ !");
+        System.out.println(" DESTINATION SERVLET APPELÉ !");
         System.out.println("   URL: " + request.getRequestURL());
         System.out.println("   Action: " + request.getParameter("action"));
 
@@ -53,7 +53,7 @@ public class DestinationServlet extends HttpServlet {
                 afficherDestinations(request, response);
             }
         } catch (SQLException e) {
-            System.err.println("❌ Erreur base de données : " + e.getMessage());
+            System.err.println(" Erreur base de données : " + e.getMessage());
             e.printStackTrace();
             request.setAttribute("erreur", "Erreur d'accès aux données : " + e.getMessage());
             request.getRequestDispatcher("/error.jsp").forward(request, response);
@@ -88,12 +88,12 @@ public class DestinationServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/destinations?success=" + action);
 
         } catch (SQLException e) {
-            System.err.println("❌ Erreur SQL : " + e.getMessage());
+            System.err.println(" Erreur SQL : " + e.getMessage());
             request.setAttribute("erreur", "Erreur lors de l'opération : " + e.getMessage());
             request.setAttribute("action", action);
             doGet(request, response);
         } catch (Exception e) {
-            System.err.println("❌ Erreur inattendue : " + e.getMessage());
+            System.err.println(" Erreur inattendue : " + e.getMessage());
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erreur interne du serveur");
         }
     }

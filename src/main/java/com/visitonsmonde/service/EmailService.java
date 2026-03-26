@@ -47,11 +47,11 @@ public class EmailService {
             // Envoi
             Transport.send(message);
 
-            System.out.println("✅ Email envoyé à : " + destinataire);
+            System.out.println(" Email envoyé à : " + destinataire);
             return true;
 
         } catch (Exception e) {
-            System.err.println("❌ Erreur envoi email à " + destinataire + " : " + e.getMessage());
+            System.err.println(" Erreur envoi email à " + destinataire + " : " + e.getMessage());
             e.printStackTrace();
             return false;
         }

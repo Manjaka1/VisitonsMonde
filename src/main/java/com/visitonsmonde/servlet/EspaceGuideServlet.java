@@ -21,7 +21,7 @@ public class EspaceGuideServlet extends HttpServlet {
     public void init() throws ServletException {
         super.init();
         guideDAO = new GuideDAO();
-        System.out.println("✅ EspaceGuideServlet initialisé");
+        System.out.println(" EspaceGuideServlet initialisé");
     }
 
     @Override
@@ -35,14 +35,14 @@ public class EspaceGuideServlet extends HttpServlet {
         Utilisateur utilisateur = (session != null) ? (Utilisateur) session.getAttribute("utilisateur") : null;
 
         if (utilisateur == null) {
-            System.out.println("❌ Utilisateur non connecté - redirection vers login");
+            System.out.println(" Utilisateur non connecté - redirection vers login");
             response.sendRedirect(request.getContextPath() + "/index.jsp");
             return;
         }
 
         // Vérifier que c'est un guide
         if (!"GUIDE".equals(utilisateur.getRole())) {
-            System.out.println("❌ Utilisateur n'est pas un guide - redirection vers index");
+            System.out.println(" Utilisateur n'est pas un guide - redirection vers index");
             session.setAttribute("erreur", "Accès réservé aux guides.");
             response.sendRedirect(request.getContextPath() + "/index.jsp");
             return;
@@ -52,7 +52,7 @@ public class EspaceGuideServlet extends HttpServlet {
         Guide guide = guideDAO.findByUtilisateurId(utilisateur.getId());
 
         if (guide == null) {
-            System.out.println("❌ Fiche guide non trouvée pour utilisateur #" + utilisateur.getId());
+            System.out.println(" Fiche guide non trouvée pour utilisateur #" + utilisateur.getId());
             session.setAttribute("erreur", "Votre fiche guide n'a pas été trouvée. Contactez l'administrateur.");
             response.sendRedirect(request.getContextPath() + "/index.jsp");
             return;
@@ -66,7 +66,7 @@ public class EspaceGuideServlet extends HttpServlet {
             return;
         }
 
-        System.out.println("✅ Guide trouvé: " + guide.getNomComplet() + " (ID: " + guide.getId() + ")");
+        System.out.println(" Guide trouvé: " + guide.getNomComplet() + " (ID: " + guide.getId() + ")");
 
         // Passer les données à la JSP
         request.setAttribute("guide", guide);

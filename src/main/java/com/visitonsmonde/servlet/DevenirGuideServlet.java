@@ -35,7 +35,7 @@ public class DevenirGuideServlet extends HttpServlet {
         super.init();
         utilisateurDAO = new UtilisateurDAO();
         guideDAO = new GuideDAO();
-        System.out.println("✅ DevenirGuideServlet initialisé");
+        System.out.println(" DevenirGuideServlet initialisé");
     }
 
     @Override
@@ -116,7 +116,7 @@ public class DevenirGuideServlet extends HttpServlet {
                 System.out.println("📸 Photo uploadée: " + photoFilename);
             }
         } catch (Exception e) {
-            System.err.println("⚠️ Erreur upload photo (continuons quand même): " + e.getMessage());
+            System.err.println(" Erreur upload photo (continuons quand même): " + e.getMessage());
         }
 
         // Créer l'utilisateur
@@ -157,7 +157,7 @@ public class DevenirGuideServlet extends HttpServlet {
         boolean guideCreated = guideDAO.create(guide);
 
         if (guideCreated) {
-            System.out.println("✅ Candidature guide créée avec succès !");
+            System.out.println(" Candidature guide créée avec succès !");
             System.out.println("   Email: " + email);
             System.out.println("   Statut: EN_ATTENTE");
             if (photoFilename != null) {
@@ -202,7 +202,7 @@ public class DevenirGuideServlet extends HttpServlet {
         Path filePath = Paths.get(uploadPath, uniqueFilename);
         Files.copy(photoPart.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-        System.out.println("✅ Photo sauvegardée: " + filePath);
+        System.out.println(" Photo sauvegardée: " + filePath);
 
         return "guides/" + uniqueFilename;
     }

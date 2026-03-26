@@ -20,7 +20,7 @@ public class BlogDetailsServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         blogDAO = new BlogDAO();
-        System.out.println("✅ BlogDetailsServlet initialisé");
+        System.out.println(" BlogDetailsServlet initialisé");
     }
 
     @Override
@@ -59,10 +59,10 @@ public class BlogDetailsServlet extends HttpServlet {
             request.getRequestDispatcher("/blog-details.jsp").forward(request, response);
 
         } catch (NumberFormatException e) {
-            System.err.println("❌ ID invalide : " + e.getMessage());
+            System.err.println(" ID invalide : " + e.getMessage());
             response.sendRedirect("blog");
         } catch (Exception e) {
-            System.err.println("❌ Erreur dans BlogDetailsServlet : " + e.getMessage());
+            System.err.println(" Erreur dans BlogDetailsServlet : " + e.getMessage());
             e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                     "Erreur lors du chargement de l'article");

@@ -26,7 +26,7 @@ public class AccueilServlet extends HttpServlet {
         destinationDAO = new DestinationDAO();
         reservationDAO = new ReservationDAO();
         utilisateurDAO = new UtilisateurDAO();
-        System.out.println("✅ AccueilServlet initialisé");
+        System.out.println(" AccueilServlet initialisé");
     }
 
     @Override

@@ -43,7 +43,7 @@
         <!-- Header Start -->
         <div class="container-fluid bg-breadcrumb">
             <div class="container text-center py-5" style="max-width: 900px;">
-                <h3 class="text-white display-3 mb-4">Contact Us</h3>
+                <h3 class="text-white display-3 mb-4">Contactez-nous</h3>
                 <ol class="breadcrumb justify-content-center mb-0">
                     <li class="breadcrumb-item"><a href="index.jsp">Home</a></li>
                     <li class="breadcrumb-item"><a href="#">Pages</a></li>
@@ -57,8 +57,8 @@
         <div class="container-fluid contact bg-light py-5">
             <div class="container py-5">
                 <div class="mx-auto text-center mb-5" style="max-width: 900px;">
-                    <h5 class="section-title px-3">Contact Us</h5>
-                    <h1 class="mb-0">Contact For Any Query</h1>
+                    <h5 class="section-title px-3">Contactez-nous</h5>
+                    <h1 class="mb-0">Contactez-nous pour toute question</h1>
                 </div>
                 <div class="row g-5 align-items-center">
                     <div class="col-lg-4">
@@ -66,7 +66,7 @@
                             <div class="text-center mb-4">
                                 <i class="fa fa-map-marker-alt fa-3x text-primary"></i>
                                 <h4 class="text-primary"><Address></Address></h4>
-                                <p class="mb-0">123 ranking Street, <br> Antananarico, Madagascar</p>
+                                <p class="mb-0">107 rue de Reuilly, Paris <br> Antananarivo, Madagascar</p>
                             </div>
                             <div class="text-center mb-4">
                                 <i class="fa fa-phone-alt fa-3x text-primary mb-3"></i>
@@ -78,32 +78,32 @@
                             <div class="text-center">
                                 <i class="fa fa-envelope-open fa-3x text-primary mb-3"></i>
                                 <h4 class="text-primary">Email</h4>
-                                <p class="mb-0">info@example.com</p>
-                                <p class="mb-0">info@example.com</p>
+                                <p class="mb-0">info@visitonsmonde.com</p>
+                                <p class="mb-0">info@visitonsmonde.com</p>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-8">
-                        <h3 class="mb-2">Send us a message</h3>
-                        <p class="mb-4">The contact form is currently inactive. Get a functional and working contact form with Ajax & PHP in a few minutes. Just copy and paste the files, add a little code and you're done. <a href="https://htmlcodex.com/contact-form">Download Now</a>.</p>
+                        <h3 class="mb-2">Envoyez-nous un message</h3>
+                        <p class="mb-4">Le formulaire de contact est actuellement désactivé. Obtenez en quelques minutes un formulaire de contact fonctionnel et opérationnel grâce à Ajax et PHP. Il vous suffit de copier-coller les fichiers, d'ajouter quelques lignes de code, et le tour est joué. little code and you're done. <a href="https://htmlcodex.com/contact-form">Télécharger maintenant.</a>.</p>
                         <form>
                             <div class="row g-3">
                                 <div class="col-md-6">
                                     <div class="form-floating">
                                         <input type="text" class="form-control border-0" id="name" placeholder="Your Name">
-                                        <label for="name">Your Name</label>
+                                        <label for="name">Votre Nom</label>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-floating">
                                         <input type="email" class="form-control border-0" id="email" placeholder="Your Email">
-                                        <label for="email">Your Email</label>
+                                        <label for="email">Votre Email</label>
                                     </div>
                                 </div>
                                 <div class="col-12">
                                     <div class="form-floating">
                                         <input type="text" class="form-control border-0" id="subject" placeholder="Subject">
-                                        <label for="subject">Subject</label>
+                                        <label for="subject">Objet</label>
                                     </div>
                                 </div>
                                 <div class="col-12">
@@ -113,7 +113,7 @@
                                     </div>
                                 </div>
                                 <div class="col-12">
-                                    <button class="btn btn-primary w-100 py-3" type="submit">Send Message</button>
+                                    <button class="btn btn-primary w-100 py-3" type="submit">Envoyer un message</button>
                                 </div>
                             </div>
                         </form>
@@ -135,12 +135,12 @@
             <div class="container text-center py-5">
                 <div class="mx-auto text-center" style="max-width: 900px;">
                     <h5 class="subscribe-title px-3">Subscribe</h5>
-                    <h1 class="text-white mb-4">Our Newsletter</h1>
+                    <h1 class="text-white mb-4">Notre newsletter</h1>
                     <p class="text-white mb-5">Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum tempore nam, architecto doloremque velit explicabo? Voluptate sunt eveniet fuga eligendi! Expedita laudantium fugiat corrupti eum cum repellat a laborum quasi.
                     </p>
                     <div class="position-relative mx-auto">
                         <input class="form-control border-primary rounded-pill w-100 py-3 ps-4 pe-5" type="text" placeholder="Your email">
-                        <button type="button" class="btn btn-primary rounded-pill position-absolute top-0 end-0 py-2 px-4 mt-2 me-2">Subscribe</button>
+                        <button type="button" class="btn btn-primary rounded-pill position-absolute top-0 end-0 py-2 px-4 mt-2 me-2">S'abonner</button>
                     </div>
                 </div>
             </div>
@@ -153,7 +153,7 @@
                 <div class="row g-5">
                     <div class="col-md-6 col-lg-6 col-xl-3">
                         <div class="footer-item d-flex flex-column">
-                            <h4 class="mb-4 text-white">Get In Touch</h4>
+                            <h4 class="mb-4 text-white">Contactez-nous</h4>
                             <a href=""><i class="fas fa-home me-2"></i> 123 Street, Antananarivo, Madagascar</a>
                             <a href=""><i class="fas fa-envelope me-2"></i> info@visitonsmonde.com</a>
                             <a href=""><i class="fas fa-phone me-2"></i> +261 34 567 89</a>
@@ -170,11 +170,11 @@
                     <div class="col-md-6 col-lg-6 col-xl-3">
                         <div class="footer-item d-flex flex-column">
                             <h4 class="mb-4 text-white">Company</h4>
-                            <a href=""><i class="fas fa-angle-right me-2"></i> About</a>
-                            <a href=""><i class="fas fa-angle-right me-2"></i> Careers</a>
+                            <a href=""><i class="fas fa-angle-right me-2"></i> À propos</a>
+                            <a href=""><i class="fas fa-angle-right me-2"></i> Carrières</a>
                             <a href=""><i class="fas fa-angle-right me-2"></i> Blog</a>
-                            <a href=""><i class="fas fa-angle-right me-2"></i> Press</a>
-                            <a href=""><i class="fas fa-angle-right me-2"></i> Gift Cards</a>
+                            <a href=""><i class="fas fa-angle-right me-2"></i> Presse</a>
+                            <a href=""><i class="fas fa-angle-right me-2"></i> Cartes-cadeaux</a>
                             <a href=""><i class="fas fa-angle-right me-2"></i> Magazine</a>
                         </div>
                     </div>
@@ -182,10 +182,10 @@
                         <div class="footer-item d-flex flex-column">
                             <h4 class="mb-4 text-white">Support</h4>
                             <a href=""><i class="fas fa-angle-right me-2"></i> Contact</a>
-                            <a href=""><i class="fas fa-angle-right me-2"></i> Legal Notice</a>
-                            <a href=""><i class="fas fa-angle-right me-2"></i> Privacy Policy</a>
-                            <a href=""><i class="fas fa-angle-right me-2"></i> Terms and Conditions</a>
-                            <a href=""><i class="fas fa-angle-right me-2"></i> Sitemap</a>
+                            <a href=""><i class="fas fa-angle-right me-2"></i> Mentions légales</a>
+                            <a href=""><i class="fas fa-angle-right me-2"></i> Politique de confidentialité</a>
+                            <a href=""><i class="fas fa-angle-right me-2"></i>  Conditions générales </a>
+                            <a href=""><i class="fas fa-angle-right me-2"></i> Plan du site </a>
                             <a href=""><i class="fas fa-angle-right me-2"></i> Cookie policy</a>
                         </div>
                     </div>

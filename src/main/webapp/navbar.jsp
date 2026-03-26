@@ -25,11 +25,11 @@
                     <i class="fa fa-user me-2"></i>Bonjour, <%= navbarUser.getPrenom() %> !
                 </span>
                 <% } else { %>
-                <!-- SI NON CONNECTÉ - Réseaux sociaux -->
-                <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href=""><i class="fab fa-twitter fw-normal"></i></a>
-                <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href=""><i class="fab fa-facebook-f fw-normal"></i></a>
-                <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href=""><i class="fab fa-linkedin-in fw-normal"></i></a>
-                <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href=""><i class="fab fa-instagram fw-normal"></i></a>
+<%--                <!-- SI NON CONNECTÉ - Réseaux sociaux -->--%>
+<%--                <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href=""><i class="fab fa-twitter fw-normal"></i></a>--%>
+<%--                <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href=""><i class="fab fa-facebook-f fw-normal"></i></a>--%>
+<%--                <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href=""><i class="fab fa-linkedin-in fw-normal"></i></a>--%>
+<%--                <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href=""><i class="fab fa-instagram fw-normal"></i></a>--%>
                 <% } %>
             </div>
         </div>
@@ -60,12 +60,7 @@
                 </div>
                 <% } else { %>
                 <!-- SI NON CONNECTÉ -->
-                <a href="${pageContext.request.contextPath}/login.jsp" class="text-light me-3">
-                    <small><i class="fa fa-sign-in-alt me-2"></i>Connexion</small>
-                </a>
-                <a href="${pageContext.request.contextPath}/register.jsp" class="text-light">
-                    <small><i class="fa fa-user-plus me-2"></i>S'inscrire</small>
-                </a>
+
                 <% } %>
             </div>
         </div>
@@ -87,33 +82,33 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto py-0">
                 <a href="${pageContext.request.contextPath}/accueil" class="nav-item nav-link">
-                    <i class="fas fa-home me-1"></i>Accueil
+                    Accueil
                 </a>
                 <a href="${pageContext.request.contextPath}/destinations" class="nav-item nav-link">
-                    <i class="fas fa-map-marked-alt me-1"></i>Destinations
+                    Destinations
                 </a>
 
                 <% if (isConnected) { %>
                 <!-- Menu pour utilisateurs connectés -->
                 <a href="${pageContext.request.contextPath}/guides" class="nav-item nav-link">
-                    <i class="fas fa-user-tie me-1"></i>Guides
+                    Guides
                 </a>
                 <% } %>
 
                 <a href="${pageContext.request.contextPath}/packages.jsp" class="nav-item nav-link">
-                    <i class="fas fa-box me-1"></i>Forfaits
+                   Forfaits
                 </a>
                 <a href="${pageContext.request.contextPath}/services.jsp" class="nav-item nav-link">
-                    <i class="fas fa-concierge-bell me-1"></i>Services
+                    Services
                 </a>
                 <a href="${pageContext.request.contextPath}/blog" class="nav-item nav-link">
-                    <i class="fas fa-blog me-1"></i>Blog
+                    Blog
                 </a>
                 <a href="${pageContext.request.contextPath}/about.jsp" class="nav-item nav-link">
-                    <i class="fas fa-info-circle me-1"></i>À Propos
+                   À Propos
                 </a>
                 <a href="${pageContext.request.contextPath}/contact.jsp" class="nav-item nav-link">
-                    <i class="fas fa-envelope me-1"></i>Contact
+                    Contact
                 </a>
 
                 <% if (!isConnected) { %>

@@ -48,7 +48,7 @@
                     <li class="breadcrumb-item"><a href="index.jsp">Home</a></li>
                     <li class="breadcrumb-item"><a href="#">Pages</a></li>
                     <li class="breadcrumb-item active text-white">Packages</li>
-                </ol>    
+                </ol>
             </div>
         </div>
         <!-- Header End -->
@@ -82,7 +82,7 @@
                                     <small class="fa fa-star text-primary"></small>
                                     <small class="fa fa-star text-primary"></small>
                                 </div>
-                                <p class="mb-4">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nesciunt nemo quia quae illum aperiam fugiat voluptatem repellat</p>
+                                <p class="mb-4">Découvrez la magie de Venise avec notre forfait romantique : promenade en gondole, visite de la Place Saint-Marc, hôtel 4★ et dîner aux chandelles inclus.</p>
                             </div>
                             <div class="row bg-primary rounded-bottom mx-0">
                                 <div class="col-6 text-start px-0">
@@ -115,7 +115,7 @@
                                     <small class="fa fa-star text-primary"></small>
                                     <small class="fa fa-star text-primary"></small>
                                 </div>
-                                <p class="mb-4">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nesciunt nemo quia quae illum aperiam fugiat voluptatem repellat</p>
+                                <p class="mb-4">De Los Angeles à San Francisco : location de voiture, hébergements, accès aux parcs nationaux et visite de la Silicon Valley. Le rêve américain en famille !</p>
                             </div>
                             <div class="row bg-primary rounded-bottom mx-0">
                                 <div class="col-6 text-start px-0">
@@ -148,7 +148,7 @@
                                     <small class="fa fa-star text-primary"></small>
                                     <small class="fa fa-star text-primary"></small>
                                 </div>
-                                <p class="mb-4">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nesciunt nemo quia quae illum aperiam fugiat voluptatem repellat</p>
+                                <p class="mb-4">Immersion totale : Tokyo, Kyoto, Osaka. Pass JR inclus, ryokan traditionnel, cérémonie du thé, visite des temples et mont Fuji avec guide francophone.</p>
                             </div>
                             <div class="row bg-primary rounded-bottom mx-0">
                                 <div class="col-6 text-start px-0">
@@ -181,7 +181,7 @@
                                     <small class="fa fa-star text-primary"></small>
                                     <small class="fa fa-star text-primary"></small>
                                 </div>
-                                <p class="mb-4">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nesciunt nemo quia quae illum aperiam fugiat voluptatem repellat</p>
+                                <p class="mb-4">Séjour all-inclusive à Phuket : resort 5★ en bord de plage, massages quotidiens, excursion îles Phi Phi, plongée sous-marine et cours de cuisine inclus.</p>
                             </div>
                             <div class="row bg-primary rounded-bottom mx-0">
                                 <div class="col-6 text-start px-0">
@@ -281,7 +281,7 @@
             </div>
         </div>
         <!-- Tour Booking End -->
-        
+
         <!-- Subscribe Start -->
         <div class="container-fluid subscribe py-5">
             <div class="container text-center py-5">
@@ -386,7 +386,7 @@
             </div>
         </div>
         <!-- Footer End -->
-        
+
         <!-- Copyright Start -->
         <div class="container-fluid copyright text-body py-4">
             <div class="container">

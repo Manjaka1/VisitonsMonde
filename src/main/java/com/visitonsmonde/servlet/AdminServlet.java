@@ -18,11 +18,11 @@ import java.util.ArrayList;
 public class AdminServlet extends HttpServlet {
 
     static {
-        System.out.println("🔥 AdminServlet - CLASSE CHARGÉE");
+        System.out.println(" AdminServlet - CLASSE CHARGÉE");
     }
 
     public AdminServlet() {
-        System.out.println("🔥 AdminServlet - CONSTRUCTEUR APPELÉ");
+        System.out.println(" AdminServlet - CONSTRUCTEUR APPELÉ");
     }
 
     private PaysDAO paysDAO;
@@ -43,7 +43,7 @@ public class AdminServlet extends HttpServlet {
             typeTourDAO = new TypeTourDAO();
             utilisateurDAO = new UtilisateurDAO();
 
-            System.out.println("✅ AdminServlet initialisé avec tous les DAOs");
+            System.out.println(" AdminServlet initialisé avec tous les DAOs");
         } catch (Exception e) {
             System.err.println("Erreur initialisation AdminServlet: " + e.getMessage());
             e.printStackTrace();
@@ -99,34 +99,34 @@ public class AdminServlet extends HttpServlet {
         try {
             if (paysDAO != null) {
                 request.setAttribute("pays", paysDAO.getAllPays());
-                System.out.println("✅ Données pays chargées - Nombre: " + paysDAO.getAllPays().size());
+                System.out.println(" Données pays chargées - Nombre: " + paysDAO.getAllPays().size());
             } else {
                 request.setAttribute("pays", new ArrayList<>());
-                System.out.println("❌ PaysDAO null - liste pays vide");
+                System.out.println(" PaysDAO null - liste pays vide");
             }
 
             if (guideDAO != null) {
                 request.setAttribute("guides", guideDAO.findAll());
-                System.out.println("✅ Données guides chargées - Nombre: " + guideDAO.findAll().size());
+                System.out.println(" Données guides chargées - Nombre: " + guideDAO.findAll().size());
             } else {
                 request.setAttribute("guides", new ArrayList<>());
-                System.out.println("❌ GuideDAO null - liste guides vide");
+                System.out.println(" GuideDAO null - liste guides vide");
             }
 
             if (destinationDAO != null) {
                 request.setAttribute("destinations", destinationDAO.getAllDestinations());
-                System.out.println("✅ Données destinations chargées - Nombre: " + destinationDAO.getAllDestinations().size());
+                System.out.println(" Données destinations chargées - Nombre: " + destinationDAO.getAllDestinations().size());
             } else {
                 request.setAttribute("destinations", new ArrayList<>());
-                System.out.println("❌ DestinationDAO null - liste destinations vide");
+                System.out.println("DestinationDAO null - liste destinations vide");
             }
 
             if (reservationDAO != null) {
                 request.setAttribute("reservations", reservationDAO.getAllReservations());
-                System.out.println("✅ Données réservations chargées - Nombre: " + reservationDAO.getAllReservations().size());
+                System.out.println(" Données réservations chargées - Nombre: " + reservationDAO.getAllReservations().size());
             } else {
                 request.setAttribute("reservations", new ArrayList<>());
-                System.out.println("❌ ReservationDAO null - liste réservations vide");
+                System.out.println(" ReservationDAO null - liste réservations vide");
             }
 
         } catch (SQLException e) {
@@ -656,7 +656,7 @@ public class AdminServlet extends HttpServlet {
         } catch (NumberFormatException e) {
             session.setAttribute("erreur", "ID de guide invalide.");
         } catch (Exception e) {
-            System.err.println("❌ Erreur refus guide: " + e.getMessage());
+            System.err.println("Erreur refus guide: " + e.getMessage());
             e.printStackTrace();
             session.setAttribute("erreur", "Erreur lors du refus du guide.");
         }
@@ -729,7 +729,7 @@ public class AdminServlet extends HttpServlet {
                     session.setAttribute("erreur", "Action pays inconnue.");
             }
         } catch (Exception e) {
-            System.err.println("❌ Erreur gestion pays: " + e.getMessage());
+            System.err.println(" Erreur gestion pays: " + e.getMessage());
             e.printStackTrace();
             session.setAttribute("erreur", "Erreur lors de l'opération sur le pays.");
         }
@@ -760,7 +760,7 @@ public class AdminServlet extends HttpServlet {
 
         if (success) {
             session.setAttribute("messageSucces", "Pays \"" + nom + "\" ajouté avec succès !");
-            System.out.println("✅ Pays ajouté: " + nom);
+            System.out.println(" Pays ajouté: " + nom);
         } else {
             session.setAttribute("erreur", "Erreur lors de l'ajout du pays.");
         }
@@ -794,7 +794,7 @@ public class AdminServlet extends HttpServlet {
 
             if (success) {
                 session.setAttribute("messageSucces", "Pays \"" + nom + "\" modifié avec succès !");
-                System.out.println("✅ Pays modifié: " + nom);
+                System.out.println(" Pays modifié: " + nom);
             } else {
                 session.setAttribute("erreur", "Erreur lors de la modification du pays.");
             }
@@ -825,7 +825,7 @@ public class AdminServlet extends HttpServlet {
 
             if (success) {
                 session.setAttribute("messageSucces", "Pays \"" + pays.getNom() + "\" supprimé avec succès !");
-                System.out.println("✅ Pays supprimé: " + pays.getNom());
+                System.out.println(" Pays supprimé: " + pays.getNom());
             } else {
                 session.setAttribute("erreur", "Erreur lors de la suppression du pays.");
             }

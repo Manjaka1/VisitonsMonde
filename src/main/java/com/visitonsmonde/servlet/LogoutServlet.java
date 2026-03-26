@@ -25,7 +25,7 @@ public class LogoutServlet extends HttpServlet {
         if (session != null) {
             // Invalider la session
             session.invalidate();
-            System.out.println("✅ Session invalidée - Utilisateur déconnecté");
+            System.out.println(" Session invalidée - Utilisateur déconnecté");
         }
 
         // Rediriger vers la page d'accueil
